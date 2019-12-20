@@ -15,8 +15,8 @@ class GenotypeClass(Enum):
 
 class Genotyper:
 
-    def __init__(self, minimum_base_count: int, homozygosity_threshold: float, positions: List[Position]) -> None:
-        self._minimum_base_count = minimum_base_count
+    def __init__(self, minimum_depth: int, homozygosity_threshold: float, positions: List[Position]) -> None:
+        self._minimum_depth = minimum_depth
         self._homozygosity_threshold = homozygosity_threshold
         self._positions = positions
 
@@ -25,7 +25,7 @@ class Genotyper:
         for position in self._positions:
             counts = base_counts(position)
             coverage = sum(counts)
-            if coverage == 0 or coverage < self._minimum_base_count:
+            if coverage == 0 or coverage < self._minimum_depth:
                 result.append(GenotypeClass.LOWCOVERAGE)
                 continue
             freqs = [count / coverage for count in counts]

@@ -41,7 +41,7 @@ class TestGenotyper(unittest.TestCase):
                       ('chr3', 50000): {'A': 0, 'C': 0, 'G': 90, 'T': 10},
                       ('chr4', 75000): {'A': 20, 'C': 5, 'G': 0, 'T': 0}}
 
-            return counts((position.chromosome, position.coordinate))
+            return counts[(position.chromosome, position.coordinate)]
 
         expected_genotypes = [GenotypeClass.HOMOZYGOTE,
                               GenotypeClass.HETEROZYGOTE,

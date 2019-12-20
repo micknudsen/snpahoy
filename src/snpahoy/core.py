@@ -33,9 +33,8 @@ class Genotyper:
                 result.append(GenotypeClass.LOWCOVERAGE)
                 continue
 
-            freqs = [count / coverage for count in counts]
-
-            if max(freqs) < self._homozygosity_threshold:
+            frequencies = [count / coverage for count in counts]
+            if max(frequencies) < self._homozygosity_threshold:
                 result.append(GenotypeClass.HETEROZYGOTE)
                 continue
 

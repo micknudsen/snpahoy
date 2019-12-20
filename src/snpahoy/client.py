@@ -1,5 +1,6 @@
 import argparse
 
+from snpahoy.core import Genotyper
 from snpahoy.parsers import get_positions
 
 
@@ -17,3 +18,7 @@ def main() -> None:
 
     with open(args.snp_bed, 'rt') as f:
         positions = get_positions(f.read().splitlines())
+
+    genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
+                          homozygosity_threshold=args.homozygosity_threshold,
+                          positions=positions)

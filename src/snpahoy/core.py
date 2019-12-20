@@ -20,10 +20,10 @@ class Genotyper:
         self._homozygosity_threshold = homozygosity_threshold
         self._positions = positions
 
-    def genotype(self, base_counts: Callable[[Position], Tuple[int, int, int, int]]) -> List[GenotypeClass]:
+    def genotype(self, get_base_counts: Callable[[Position], Tuple[int, int, int, int]]) -> List[GenotypeClass]:
         result: List[GenotypeClass] = []
         for position in self._positions:
-            counts = base_counts(position)
+            counts = get_base_counts(position)
             depth = sum(counts)
             if depth == 0 or depth < self._minimum_depth:
                 result.append(GenotypeClass.LOWCOVERAGE)

@@ -10,6 +10,10 @@ setup(
 
     test_suite='tests',
 
+    entry_points={
+        'console_scripts': ['snpahoy = snpahoy.client:main']
+    },
+
     python_requires='>=3.6',
 
     author='Michael Knudsen',

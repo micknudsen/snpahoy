@@ -21,4 +21,16 @@ class Genotyper:
         self._positions = positions
 
     def genotype(self, base_counts: Callable[[Position], Tuple[int, int, int, int]]) -> List[GenotypeClass]:
-        pass
+        result: List[GenotypeClass] = []
+        for position in self._positions:
+            counts = base_counts(position)
+            coverage = sum(counts)
+            if coverage == 0 or coverage < self._minimum_base_count:
+                result.append(GenotypeClass.LOWCOVERAGE)
+                continue
+            freqs = [count / coverage for count in counts]
+            if max(freqs) < self._homozygosity_threshold:
+                result.append(GenotypeClass.HETEROZYGOTE)
+                continue
+            result.append(GenotypeClass.HOMOZYGOTE)
+        return result

@@ -2,5 +2,5 @@ from typing import NamedTuple
 
 
 class Position(NamedTuple):
-    chrom: str
+    chromosome: str
     coordinate: int

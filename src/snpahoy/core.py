@@ -24,11 +24,11 @@ class Genotyper:
         result: List[GenotypeClass] = []
         for position in self._positions:
             counts = base_counts(position)
-            coverage = sum(counts)
-            if coverage == 0 or coverage < self._minimum_depth:
+            depth = sum(counts)
+            if depth == 0 or depth < self._minimum_depth:
                 result.append(GenotypeClass.LOWCOVERAGE)
                 continue
-            freqs = [count / coverage for count in counts]
+            freqs = [count / depth for count in counts]
             if max(freqs) < self._homozygosity_threshold:
                 result.append(GenotypeClass.HETEROZYGOTE)
                 continue

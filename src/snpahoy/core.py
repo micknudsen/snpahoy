@@ -6,5 +6,9 @@ class Position(NamedTuple):
     coordinate: int
 
 
+class GenotypeClass:
+    pass
+
+
 class Genotyper:
     pass

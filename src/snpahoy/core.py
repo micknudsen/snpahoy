@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, NamedTuple
+from typing import Callable, List, NamedTuple, Tuple
 
 
 class Position(NamedTuple):
@@ -19,3 +19,6 @@ class Genotyper:
         self._minimum_base_count = minimum_base_count
         self._homozygosity_threshold = homozygosity_threshold
         self._positions = positions
+
+    def genotype(self, base_counts: Callable[[Position], Tuple[int, int, int, int]]) -> List[GenotypeClass]:
+        pass

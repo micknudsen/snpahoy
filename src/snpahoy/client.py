@@ -7,9 +7,9 @@ from snpahoy.parsers import get_positions
 
 
 def get_base_counts(bam_file, position):
-    coverage = pysam.AlignmentFile(bam_file).count_coverage(contig=position.chromosome,
-                                                            start=position.coordinate,
-                                                            stop=position.coordinate + 1)
+    coverage = bam_file.count_coverage(contig=position.chromosome,
+                                       start=position.coordinate,
+                                       stop=position.coordinate + 1)
     return tuple([counts[0] for counts in coverage])
 
 
@@ -32,5 +32,8 @@ def main():
                           homozygosity_threshold=args.homozygosity_threshold,
                           positions=positions)
 
-    tumor_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=args.tumor_bam_file, position=position))
-    normal_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=args.normal_bam_file, position=position))
+    tumor_bam_file = pysam.AlignmentFile(args.tumor_bam_file)
+    normal_bam_file = pysam.AlignmentFile(args.normal_bam_file)
+
+    tumor_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=tumor_bam_file, position=position))
+    normal_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=normal_bam_file, position=position))

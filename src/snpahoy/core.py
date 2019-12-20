@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, NamedTuple
 
 
@@ -6,8 +7,10 @@ class Position(NamedTuple):
     coordinate: int
 
 
-class GenotypeClass:
-    pass
+class GenotypeClass(Enum):
+    HOMOZYGOTE = 0
+    HETEROZYGOTE = 1
+    LOWCOVERAGE = 2
 
 
 class Genotyper:

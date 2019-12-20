@@ -16,6 +16,10 @@ setup(
 
     python_requires='>=3.6',
 
+    install_requires=[
+        'pysam',
+    ],
+
     author='Michael Knudsen',
     author_email='micknudsen@gmail.com',
     license='MIT'

@@ -27,7 +27,7 @@ class TestGenotyper(unittest.TestCase):
                      Position(chromosome='chr3', coordinate=50000),
                      Position(chromosome='chr4', coordinate=75000)]
 
-        genotyper = Genotyper(minimum_depth=30,
+        genotyper = Genotyper(minimum_coverage=30,
                               homozygosity_threshold=0.95,
                               positions=positions)
 
@@ -51,7 +51,7 @@ class TestGenotyper(unittest.TestCase):
 
     def test_zero_counts(self):
 
-        genotyper = Genotyper(minimum_depth=0,
+        genotyper = Genotyper(minimum_coverage=0,
                               homozygosity_threshold=0.95,
                               positions=[Position(chromosome='chr1', coordinate=10000)])
 

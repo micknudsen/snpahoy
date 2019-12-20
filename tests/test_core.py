@@ -39,7 +39,7 @@ class TestGenotyper(unittest.TestCase):
                       ('chr3', 50000): {'A': 0, 'C': 0, 'G': 90, 'T': 10},
                       ('chr4', 75000): {'A': 20, 'C': 5, 'G': 0, 'T': 0}}
 
-            return list(counts[(position.chromosome, position.coordinate)].values())
+            return tuple(counts[(position.chromosome, position.coordinate)].values())
 
         expected_genotypes = [GenotypeClass.HOMOZYGOTE,
                               GenotypeClass.HETEROZYGOTE,
@@ -48,3 +48,11 @@ class TestGenotyper(unittest.TestCase):
                               GenotypeClass.LOWCOVERAGE]
 
         self.assertEqual(genotyper.genotype(get_base_counts), expected_genotypes)
+
+    def test_zero_counts(self):
+
+        genotyper = Genotyper(minimum_base_count=0,
+                              homozygosity_threshold=0.95,
+                              positions=[Position(chromosome='chr1', coordinate=10000)])
+
+        self.assertEqual(genotyper.genotype(lambda position: (0, 0, 0, 0)), [GenotypeClass.LOWCOVERAGE])

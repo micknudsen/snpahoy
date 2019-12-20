@@ -19,7 +19,7 @@ class TestPosition(unittest.TestCase):
 
 class TestGenotyper(unittest.TestCase):
 
-    def setUp(self):
+    def test_genotyper(self):
 
         positions = [Position(chromosome='chr1', coordinate=10000),
                      Position(chromosome='chr1', coordinate=25000),
@@ -27,11 +27,9 @@ class TestGenotyper(unittest.TestCase):
                      Position(chromosome='chr3', coordinate=50000),
                      Position(chromosome='chr4', coordinate=75000)]
 
-        self.genotyper = Genotyper(minimum_base_count=30,
-                                   homozygosity_threshold=0.95,
-                                   positions=positions)
-
-    def test_genotyper(self):
+        genotyper = Genotyper(minimum_base_count=30,
+                              homozygosity_threshold=0.95,
+                              positions=positions)
 
         def get_base_counts(position):
 
@@ -49,4 +47,4 @@ class TestGenotyper(unittest.TestCase):
                               GenotypeClass.HETEROZYGOTE,
                               GenotypeClass.LOWCOVERAGE]
 
-        self.assertEqual(self.genotyper.genotype(get_base_counts), expected_genotypes)
+        self.assertEqual(genotyper.genotype(get_base_counts), expected_genotypes)

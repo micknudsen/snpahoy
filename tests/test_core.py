@@ -49,4 +49,4 @@ class TestGenotyper(unittest.TestCase):
                               GenotypeClass.HETEROZYGOTE,
                               GenotypeClass.LOWCOVERAGE]
 
-        self.assertEqual(self.genotyper(get_base_counts), expected_genotypes)
+        self.assertEqual(self.genotyper.genotype(get_base_counts), expected_genotypes)

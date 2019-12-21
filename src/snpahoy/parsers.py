@@ -4,7 +4,7 @@ from snpahoy.core import Position
 
 
 def get_positions(stream: Iterable[str]) -> List[Position]:
-    result = []
+    result: List[Position] = []
     for line in stream:
         chromosome, start, stop = line.split('\t')
         for coordinate in range(int(start), int(stop)):

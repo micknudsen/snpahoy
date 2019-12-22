@@ -2,6 +2,9 @@ from enum import Enum
 from typing import NamedTuple, Tuple
 
 
+Counts = Tuple[int, int, int, int]
+
+
 class Position(NamedTuple):
     chromosome: str
     coordinate: int
@@ -19,13 +22,13 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-    def genotype(self, base_counts: Tuple[int, int, int, int]) -> GenotypeClass:
+    def genotype(self, counts: Counts) -> GenotypeClass:
 
-        coverage = sum(base_counts)
+        coverage = sum(counts)
         if coverage == 0 or coverage < self._minimum_coverage:
             return GenotypeClass.LOWCOVERAGE
 
-        frequencies = [count / coverage for count in base_counts]
+        frequencies = [count / coverage for count in counts]
         if max(frequencies) < self._homozygosity_threshold:
             return GenotypeClass.HETEROZYGOTE
 

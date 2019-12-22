@@ -23,18 +23,8 @@ class TestGenotyper(unittest.TestCase):
 
         genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
 
-        def get_base_counts(position):
-
-            counts = {('chr1', 10000): {'A': 50, 'C': 0, 'G': 0, 'T': 0},
-                      ('chr1', 25000): {'A': 0, 'C': 50, 'G': 50, 'T': 0},
-                      ('chr2', 15000): {'A': 0, 'C': 95, 'G': 5, 'T': 0},
-                      ('chr3', 50000): {'A': 0, 'C': 0, 'G': 90, 'T': 10},
-                      ('chr4', 75000): {'A': 20, 'C': 5, 'G': 0, 'T': 0}}
-
-            return tuple(counts[(position.chromosome, position.coordinate)].values())
-
-        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr1', 10000)), GenotypeClass.HOMOZYGOTE)
-        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr1', 25000)), GenotypeClass.HETEROZYGOTE)
-        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr2', 15000)), GenotypeClass.HOMOZYGOTE)
-        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr3', 50000)), GenotypeClass.HETEROZYGOTE)
-        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr4', 75000)), GenotypeClass.LOWCOVERAGE)
+        self.assertEqual(genotyper.genotype([50, 0, 0, 0]), GenotypeClass.HOMOZYGOTE)
+        self.assertEqual(genotyper.genotype([0, 50, 50, 0]), GenotypeClass.HETEROZYGOTE)
+        self.assertEqual(genotyper.genotype([0, 95, 5, 0]), GenotypeClass.HOMOZYGOTE)
+        self.assertEqual(genotyper.genotype([0, 0, 90, 10]), GenotypeClass.HETEROZYGOTE)
+        self.assertEqual(genotyper.genotype([20, 5, 0, 0]), GenotypeClass.LOWCOVERAGE)

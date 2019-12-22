@@ -21,15 +21,7 @@ class TestGenotyper(unittest.TestCase):
 
     def test_genotyper(self):
 
-        positions = [Position(chromosome='chr1', coordinate=10000),
-                     Position(chromosome='chr1', coordinate=25000),
-                     Position(chromosome='chr2', coordinate=15000),
-                     Position(chromosome='chr3', coordinate=50000),
-                     Position(chromosome='chr4', coordinate=75000)]
-
-        genotyper = Genotyper(minimum_coverage=30,
-                              homozygosity_threshold=0.95,
-                              positions=positions)
+        genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
 
         def get_base_counts(position):
 
@@ -41,18 +33,8 @@ class TestGenotyper(unittest.TestCase):
 
             return tuple(counts[(position.chromosome, position.coordinate)].values())
 
-        expected_genotypes = [GenotypeClass.HOMOZYGOTE,
-                              GenotypeClass.HETEROZYGOTE,
-                              GenotypeClass.HOMOZYGOTE,
-                              GenotypeClass.HETEROZYGOTE,
-                              GenotypeClass.LOWCOVERAGE]
-
-        self.assertEqual(genotyper.genotype(get_base_counts), expected_genotypes)
-
-    def test_zero_counts(self):
-
-        genotyper = Genotyper(minimum_coverage=0,
-                              homozygosity_threshold=0.95,
-                              positions=[Position(chromosome='chr1', coordinate=10000)])
-
-        self.assertEqual(genotyper.genotype(lambda position: (0, 0, 0, 0)), [GenotypeClass.LOWCOVERAGE])
+        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr1', 10000)), GenotypeClass.HOMOZYGOTE)
+        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr1', 25000)), GenotypeClass.HETEROZYGOTE)
+        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr2', 15000)), GenotypeClass.HOMOZYGOTE)
+        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr3', 50000)), GenotypeClass.HETEROZYGOTE)
+        self.assertEqual(genotyper.genotype(get_base_counts, Position('chr4', 75000)), GenotypeClass.LOWCOVERAGE)

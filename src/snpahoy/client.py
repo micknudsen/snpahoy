@@ -1,16 +1,17 @@
 import argparse
 
-import pysam
+from pysam import AlignmentFile
 
-from snpahoy.core import Genotyper
-from snpahoy.parsers import get_positions
+from snpahoy.core import Position
+# from snpahoy.core import Genotyper
+# from snpahoy.parsers import get_positions
 
 
-def get_base_counts(bam_file, position):
-    coverage = bam_file.count_coverage(contig=position.chromosome,
-                                       start=position.coordinate,
-                                       stop=position.coordinate + 1)
-    return tuple([counts[0] for counts in coverage])
+def get_base_counts(alignment: AlignmentFile, position: Position):
+    coverage = alignment.count_coverage(contig=position[0],
+                                        start=position[1],
+                                        stop=position[1] + 1)
+    return tuple(counts[0] for counts in coverage)
 
 
 def main():
@@ -23,17 +24,16 @@ def main():
     parser.add_argument('--minimum_coverage', type=int, default=30)
     parser.add_argument('--homozygosity_threshold', type=float, default=0.95)
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
 
-    with open(args.snp_bed_file, 'rt') as f:
-        positions = get_positions(f.read().splitlines())
+    # with open(args.snp_bed_file, 'rt') as f:
+    #     positions = get_positions(f.read().splitlines())
 
-    genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
-                          homozygosity_threshold=args.homozygosity_threshold,
-                          positions=positions)
+    # genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
+    #                       homozygosity_threshold=args.homozygosity_threshold)
 
-    tumor_bam_file = pysam.AlignmentFile(args.tumor_bam_file)
-    normal_bam_file = pysam.AlignmentFile(args.normal_bam_file)
+    # tumor_bam_file = pysam.AlignmentFile(args.tumor_bam_file)
+    # normal_bam_file = pysam.AlignmentFile(args.normal_bam_file)
 
-    tumor_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=tumor_bam_file, position=position))
-    normal_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=normal_bam_file, position=position))
+    # tumor_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=tumor_bam_file, position=position))
+    # normal_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=normal_bam_file, position=position))

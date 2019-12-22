@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Callable, List, NamedTuple, Tuple
+from typing import Callable, NamedTuple, Tuple
 
 
 class Position(NamedTuple):
@@ -19,24 +19,16 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-    def genotype(self, get_base_counts: Callable[[Position], Tuple[int, int, int, int]]) -> List[GenotypeClass]:
+    def genotype(self, get_base_counts: Callable[[Position], Tuple[int, int, int, int]], position: Position) -> GenotypeClass:
 
-        result: List[GenotypeClass] = []
+        counts = get_base_counts(position)
+        coverage = sum(counts)
 
-        for position in self._positions:
+        if coverage == 0 or coverage < self._minimum_coverage:
+            return GenotypeClass.LOWCOVERAGE
 
-            counts = get_base_counts(position)
-            coverage = sum(counts)
+        frequencies = [count / coverage for count in counts]
+        if max(frequencies) < self._homozygosity_threshold:
+            return GenotypeClass.HETEROZYGOTE
 
-            if coverage == 0 or coverage < self._minimum_coverage:
-                result.append(GenotypeClass.LOWCOVERAGE)
-                continue
-
-            frequencies = [count / coverage for count in counts]
-            if max(frequencies) < self._homozygosity_threshold:
-                result.append(GenotypeClass.HETEROZYGOTE)
-                continue
-
-            result.append(GenotypeClass.HOMOZYGOTE)
-
-        return result
+        return GenotypeClass.HOMOZYGOTE

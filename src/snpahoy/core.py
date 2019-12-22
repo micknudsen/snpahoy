@@ -1,13 +1,9 @@
 from enum import Enum
-from typing import NamedTuple, Tuple
+from typing import Tuple
 
 
+Position = Tuple[str, int]
 Counts = Tuple[int, int, int, int]
-
-
-class Position(NamedTuple):
-    chromosome: str
-    coordinate: int
 
 
 class GenotypeClass(Enum):

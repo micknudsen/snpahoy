@@ -8,5 +8,6 @@ def get_positions(stream: Iterable[str]) -> List[Position]:
     for line in stream:
         chromosome, start, stop = line.split('\t')
         for coordinate in range(int(start), int(stop)):
-            result.append(Position(chromosome=chromosome, coordinate=coordinate))
+            position = (chromosome, coordinate)
+            result.append(position)
     return result

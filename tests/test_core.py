@@ -1,7 +1,21 @@
 import unittest
 
+from snpahoy.core import SNP
+from snpahoy.core import Counts
+from snpahoy.core import Position
 from snpahoy.core import Genotyper
 from snpahoy.core import GenotypeClass
+
+
+class TestSNP(unittest.TestCase):
+
+    def setUp(self):
+        self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
+                       counts=Counts(a=95, c=1, g=3, t=1),
+                       genotype=GenotypeClass.HOMOZYGOTE)
+
+    def test_maf(self):
+        self.assertEqual(self.snp.maf, 0.03)
 
 
 class TestGenotyper(unittest.TestCase):

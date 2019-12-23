@@ -20,8 +20,10 @@ class GenotypeClass(Enum):
     LOWCOVERAGE = 2
 
 
-class SNP:
-    pass
+class SNP(NamedTuple):
+    position: Position
+    counts: Counts
+    genotype: GenotypeClass
 
 
 class Genotyper:

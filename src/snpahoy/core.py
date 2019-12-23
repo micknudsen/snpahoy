@@ -58,5 +58,5 @@ class Genotyper:
         return GenotypeClass.HOMOZYGOTE
 
 
-def get_snps(postions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:
+def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:
     pass

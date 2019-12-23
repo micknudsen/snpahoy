@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import NamedTuple
+from typing import Callable, List, NamedTuple
 
 
 class Position(NamedTuple):
@@ -56,3 +56,7 @@ class Genotyper:
             return GenotypeClass.HETEROZYGOTE
 
         return GenotypeClass.HOMOZYGOTE
+
+
+def get_snps(postions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:
+    pass

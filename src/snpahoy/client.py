@@ -4,6 +4,8 @@ from pysam import AlignmentFile
 
 from snpahoy.core import Position
 # from snpahoy.core import Genotyper
+
+# from snpahoy.parsers import get_snps
 # from snpahoy.parsers import get_positions
 
 
@@ -32,8 +34,5 @@ def main():
     # genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
     #                       homozygosity_threshold=args.homozygosity_threshold)
 
-    # tumor_bam_file = pysam.AlignmentFile(args.tumor_bam_file)
-    # normal_bam_file = pysam.AlignmentFile(args.normal_bam_file)
-
-    # tumor_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=tumor_bam_file, position=position))
-    # normal_genotypes = genotyper.genotype(lambda position: get_base_counts(bam_file=normal_bam_file, position=position))
+    # tumor_alignment = AlignmentFile(args.tumor_bam_file)
+    # normal_alignment = AlignmentFile(args.normal_bam_file)

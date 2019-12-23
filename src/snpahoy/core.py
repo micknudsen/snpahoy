@@ -15,15 +15,14 @@ class Counts(NamedTuple):
 
 
 class GenotypeClass(Enum):
-    UNKNOWN = 0
-    HOMOZYGOTE = 1
-    HETEROZYGOTE = 2
-    LOWCOVERAGE = 3
+    HOMOZYGOTE = 0
+    HETEROZYGOTE = 1
+    LOWCOVERAGE = 2
 
 
 class SNP:
 
-    def __init__(self, position: Position, counts: Counts, genotype: GenotypeClass = GenotypeClass.UNKNOWN):
+    def __init__(self, position: Position, counts: Counts, genotype: GenotypeClass):
         self.position = position
         self.counts = counts
         self.genotype = genotype

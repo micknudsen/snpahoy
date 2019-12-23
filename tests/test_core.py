@@ -6,6 +6,8 @@ from snpahoy.core import Position
 from snpahoy.core import Genotyper
 from snpahoy.core import GenotypeClass
 
+from snpahoy.core import get_snps
+
 
 class TestSNP(unittest.TestCase):
 

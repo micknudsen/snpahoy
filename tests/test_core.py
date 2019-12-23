@@ -15,6 +15,9 @@ class TestSNP(unittest.TestCase):
                        counts=Counts(a=95, c=1, g=3, t=1),
                        genotype=GenotypeClass.HOMOZYGOTE)
 
+    def test_coverage(self):
+        self.assertEqual(self.snp.coverage, 100)
+
     def test_maf(self):
         self.assertEqual(self.snp.maf, 0.03)
 

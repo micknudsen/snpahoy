@@ -53,7 +53,14 @@ class TestCore(unittest.TestCase):
                       Position(chromosome='chr2', coordinate=5000): Counts(a=0, c=30, g=30, t=0)}
             return counts[position]
 
-        snps = get_snps(postions=positions, genotyper=genotyper, get_counts=get_counts)
+        snps = get_snps(positions=positions, genotyper=genotyper, get_counts=get_counts)
 
-        self.assertEqual(snps, [SNP(position=Position(chromosome='chr1', coordinate=1000), counts=Counts(a=50, c=0, g=0, t=0), genotype=GenotypeClass.HOMOZYGOTE),
-                                SNP(position=Position(chromosome='chr2', coordinate=5000), counts=Counts(a=0, c=30, g=30, t=0), genotype=GenotypeClass.HETEROZYGOTE)])
+        self.assertEqual(snps[0].position.chromosome, 'chr1')
+        self.assertEqual(snps[0].position.coordinate, 1000)
+        self.assertEqual(snps[0].counts, Counts(a=50, c=0, g=0, t=0))
+        self.assertEqual(snps[0].genotype, GenotypeClass.HOMOZYGOTE)
+
+        self.assertEqual(snps[0].position.chromosome, 'chr2')
+        self.assertEqual(snps[0].position.coordinate, 5000)
+        self.assertEqual(snps[0].counts, Counts(a=0, c=30, g=30, t=0))
+        self.assertEqual(snps[0].genotype, GenotypeClass.HETEROZYGOTE)

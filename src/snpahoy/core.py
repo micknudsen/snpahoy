@@ -25,6 +25,13 @@ class SNP(NamedTuple):
     counts: Counts
     genotype: GenotypeClass
 
+    @property
+    def maf(self) -> float:
+        coverage = sum(self.counts)
+        if coverage == 0:
+            return 0.0
+        return sorted(self.counts, reverse=True)[1] / coverage
+
 
 class Genotyper:
 

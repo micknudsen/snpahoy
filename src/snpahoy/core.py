@@ -15,22 +15,25 @@ class Counts(NamedTuple):
 
 
 class GenotypeClass(Enum):
-    HOMOZYGOTE = 0
-    HETEROZYGOTE = 1
-    LOWCOVERAGE = 2
+    UNKNOWN = 0
+    HOMOZYGOTE = 1
+    HETEROZYGOTE = 2
+    LOWCOVERAGE = 3
 
 
-class SNP(NamedTuple):
-    position: Position
-    counts: Counts
-    genotype: GenotypeClass
+class SNP:
+
+    def __init__(self, position: Position, counts: Counts, genotype: GenotypeClass = GenotypeClass.UNKNOWN):
+        self._position = position
+        self._counts = counts
+        self._genotype = genotype
 
     @property
     def maf(self) -> float:
-        coverage = sum(self.counts)
+        coverage = sum(self._counts)
         if coverage == 0:
             return 0.0
-        return sorted(self.counts, reverse=True)[1] / coverage
+        return sorted(self._counts, reverse=True)[1] / coverage
 
 
 class Genotyper:

@@ -7,7 +7,7 @@ from snpahoy.core import Position
 # from snpahoy.parsers import get_positions
 
 
-def get_base_counts(alignment: AlignmentFile, position: Position):
+def get_counts(alignment: AlignmentFile, position: Position):
     coverage = alignment.count_coverage(contig=position.chromosome,
                                         start=position.coordinate,
                                         stop=position.coordinate + 1)

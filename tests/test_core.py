@@ -60,7 +60,7 @@ class TestCore(unittest.TestCase):
         self.assertEqual(snps[0].counts, Counts(a=50, c=0, g=0, t=0))
         self.assertEqual(snps[0].genotype, GenotypeClass.HOMOZYGOTE)
 
-        self.assertEqual(snps[0].position.chromosome, 'chr2')
-        self.assertEqual(snps[0].position.coordinate, 5000)
-        self.assertEqual(snps[0].counts, Counts(a=0, c=30, g=30, t=0))
-        self.assertEqual(snps[0].genotype, GenotypeClass.HETEROZYGOTE)
+        self.assertEqual(snps[1].position.chromosome, 'chr2')
+        self.assertEqual(snps[1].position.coordinate, 5000)
+        self.assertEqual(snps[1].counts, Counts(a=0, c=30, g=30, t=0))
+        self.assertEqual(snps[1].genotype, GenotypeClass.HETEROZYGOTE)

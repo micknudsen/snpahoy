@@ -8,9 +8,9 @@ from snpahoy.core import Position
 
 
 def get_base_counts(alignment: AlignmentFile, position: Position):
-    coverage = alignment.count_coverage(contig=position[0],
-                                        start=position[1],
-                                        stop=position[1] + 1)
+    coverage = alignment.count_coverage(contig=position.chromosome,
+                                        start=position.coordinate,
+                                        stop=position.coordinate + 1)
     return tuple(counts[0] for counts in coverage)
 
 

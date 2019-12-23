@@ -9,13 +9,14 @@ from snpahoy.core import GenotypeClass
 
 class TestSNP(unittest.TestCase):
 
+    def setUp(self):
+
+        self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
+                       counts=Counts(a=95, c=1, g=3, t=1),
+                       genotype=GenotypeClass.HOMOZYGOTE)
+
     def test_maf(self):
-
-        snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-                  counts=Counts(a=95, c=1, g=3, t=1),
-                  genotype=GenotypeClass.HOMOZYGOTE)
-
-        self.assertEqual(snp.maf, 0.03)
+        self.assertEqual(self.snp.maf, 0.03)
 
     def test_maf_uncovered_position(self):
 

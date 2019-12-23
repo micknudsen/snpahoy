@@ -17,14 +17,14 @@ class TestSNP(unittest.TestCase):
     def test_coverage(self):
         self.assertEqual(self.snp.coverage(), 100)
 
-    def test_maf(self):
-        self.assertEqual(self.snp.maf(), 0.03)
+    def test_minor_allele_frequency(self):
+        self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
 
-    def test_maf_uncovered_position(self):
+    def test_minor_allele_frequency_uncovered_position(self):
         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
                   counts=Counts(a=0, c=0, g=0, t=0),
                   genotype=GenotypeClass.LOWCOVERAGE)
-        self.assertEqual(snp.maf(), 0.0)
+        self.assertEqual(snp.minor_allele_frequency(), 0.0)
 
 
 class TestGenotyper(unittest.TestCase):

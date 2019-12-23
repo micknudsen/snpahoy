@@ -20,6 +20,10 @@ class GenotypeClass(Enum):
     LOWCOVERAGE = 2
 
 
+class SNP:
+    pass
+
+
 class Genotyper:
 
     def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:

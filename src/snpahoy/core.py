@@ -27,15 +27,13 @@ class SNP:
         self.counts = counts
         self.genotype = genotype
 
-    @property
     def coverage(self) -> int:
         return sum(self.counts)
 
-    @property
     def maf(self) -> float:
-        if self.coverage == 0:
+        if self.coverage() == 0:
             return 0.0
-        return sorted(self.counts, reverse=True)[1] / self.coverage
+        return sorted(self.counts, reverse=True)[1] / self.coverage()
 
 
 class Genotyper:

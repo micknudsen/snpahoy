@@ -17,16 +17,16 @@ class TestSNP(unittest.TestCase):
                        genotype=GenotypeClass.HOMOZYGOTE)
 
     def test_coverage(self):
-        self.assertEqual(self.snp.coverage, 100)
+        self.assertEqual(self.snp.coverage(), 100)
 
     def test_maf(self):
-        self.assertEqual(self.snp.maf, 0.03)
+        self.assertEqual(self.snp.maf(), 0.03)
 
     def test_maf_uncovered_position(self):
         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
                   counts=Counts(a=0, c=0, g=0, t=0),
                   genotype=GenotypeClass.LOWCOVERAGE)
-        self.assertEqual(snp.maf, 0.0)
+        self.assertEqual(snp.maf(), 0.0)
 
 
 class TestCore(unittest.TestCase):

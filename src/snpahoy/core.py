@@ -34,10 +34,9 @@ class SNP:
 
     @property
     def maf(self) -> float:
-        coverage = sum(self._counts)
-        if coverage == 0:
+        if self.coverage == 0:
             return 0.0
-        return sorted(self._counts, reverse=True)[1] / coverage
+        return sorted(self._counts, reverse=True)[1] / self.coverage
 
 
 class Genotyper:

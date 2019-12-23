@@ -59,4 +59,9 @@ class Genotyper:
 
 
 def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:
-    pass
+    result: List[SNP] = []
+    for position in positions:
+        counts = get_counts(position)
+        genotype = genotyper.genotype(counts)
+        result.append(SNP(position, counts, genotype))
+    return result

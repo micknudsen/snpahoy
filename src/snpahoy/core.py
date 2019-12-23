@@ -29,6 +29,10 @@ class SNP:
         self._genotype = genotype
 
     @property
+    def coverage(self) -> int:
+        return sum(self._counts)
+
+    @property
     def maf(self) -> float:
         coverage = sum(self._counts)
         if coverage == 0:

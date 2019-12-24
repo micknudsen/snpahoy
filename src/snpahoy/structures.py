@@ -1,5 +1,7 @@
 from enum import Enum
+
 from typing import NamedTuple
+from typing import Tuple
 
 
 class Position(NamedTuple):
@@ -14,7 +16,4 @@ class Counts(NamedTuple):
     t: int
 
 
-class GenotypeClass(Enum):
-    HOMOZYGOTE = 0
-    HETEROZYGOTE = 1
-    LOWCOVERAGE = 2
+Genotype = Tuple[str, str]

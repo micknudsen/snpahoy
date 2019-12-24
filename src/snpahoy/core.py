@@ -1,5 +1,4 @@
 from snpahoy.structures import Counts
-from snpahoy.structures import GenotypeClass
 from snpahoy.structures import Position
 
 

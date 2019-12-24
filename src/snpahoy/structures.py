@@ -1,5 +1,3 @@
-from enum import Enum
-
 from typing import NamedTuple
 from typing import Tuple
 

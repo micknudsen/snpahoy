@@ -1,4 +1,4 @@
-# from typing import Callable, Iterable, List
+from typing import Iterable, List, Tuple
 
 # from snpahoy.core import SNP
 # from snpahoy.core import Counts
@@ -6,13 +6,13 @@
 # from snpahoy.core import Genotyper
 
 
-# def get_positions(stream: Iterable[str]) -> List[Position]:
-#     result: List[Position] = []
-#     for line in stream:
-#         chromosome, start, stop = line.split('\t')
-#         for coordinate in range(int(start), int(stop)):
-#             result.append(Position(chromosome, coordinate))
-#     return result
+def parse_bed_file(stream: Iterable[str]) -> List[Tuple[str, int]]:
+    result: List[Tuple[str, int]] = []
+    for line in stream:
+        chromosome, start, stop = line.split('\t')
+        for coordinate in range(int(start), int(stop)):
+            result.append((chromosome, coordinate))
+    return result
 
 
 # def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:

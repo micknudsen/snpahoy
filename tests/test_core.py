@@ -4,7 +4,6 @@ from snpahoy.core import SNP
 from snpahoy.core import Counts
 from snpahoy.core import Position
 from snpahoy.core import Genotyper
-from snpahoy.core import GenotypeClass
 
 
 class TestSNP(unittest.TestCase):

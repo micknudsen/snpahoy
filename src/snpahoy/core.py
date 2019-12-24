@@ -1,5 +1,10 @@
+from typing import NamedTuple
 # from snpahoy.structures import Counts
-# from snpahoy.structures import Position
+
+
+class Position(NamedTuple):
+    chromosome: str
+    coordinate: int
 
 
 # class SNP:

@@ -1,12 +1,6 @@
 # from typing import NamedTuple
 # from typing import Tuple
 
-
-# class Position(NamedTuple):
-#     chromosome: str
-#     coordinate: int
-
-
 # class Counts(NamedTuple):
 #     a: int
 #     c: int

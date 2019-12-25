@@ -42,7 +42,7 @@ class TestGenotyper(unittest.TestCase):
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(bases=['C', 'G']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(bases=['C', 'C']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(bases=['G', 'T']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), None)
+        self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), Genotype(bases=[]))
 
 
 class TestSNP(unittest.TestCase):
@@ -67,7 +67,7 @@ class TestSample(unittest.TestCase):
         self.sample = Sample(snps=[SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(bases=['A', 'A'])),
                                    SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(bases=['C', 'G'])),
                                    SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(bases=['C', 'C'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=4000), counts=BaseCounts(A=2, C=0, G=3, T=1), genotype=None)])
+                                   SNP(position=Position(chromosome='chr1', coordinate=4000), counts=BaseCounts(A=2, C=0, G=3, T=1), genotype=Genotype(bases=[]))])
 
     def test_number_of_snps(self):
         self.assertEqual(self.sample.number_of_snps(), 4)

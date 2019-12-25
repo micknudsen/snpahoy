@@ -2,7 +2,6 @@ from enum import Enum
 
 from typing import List
 from typing import NamedTuple
-from typing import Optional
 
 
 class GenotypeCategory(Enum):
@@ -79,11 +78,11 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-    def genotype(self, counts: BaseCounts) -> Optional[Genotype]:
+    def genotype(self, counts: BaseCounts) -> Genotype:
 
         coverage = sum(counts)
         if coverage == 0 or coverage < self._minimum_coverage:
-            return None
+            return Genotype(bases=[])
 
         counts_dict = counts._asdict()
         bases_ordered_by_count = sorted(counts_dict, key=counts_dict.get, reverse=True)

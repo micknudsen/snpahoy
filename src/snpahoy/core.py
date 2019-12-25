@@ -1,3 +1,4 @@
+from typing import Dict
 from typing import NamedTuple
 from typing import Optional
 
@@ -9,7 +10,7 @@ class Position(NamedTuple):
 
 class SNP:
 
-    def __init__(self, position: Position, counts: BaseCounts, genotype: str) -> None:
+    def __init__(self, position: Position, counts: Dict[str, int], genotype: str) -> None:
         self._position = position
         self._counts = counts
         self._genotype = genotype
@@ -28,7 +29,7 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-    def genotype(self, counts: BaseCounts) -> Optional[str]:
+    def genotype(self, counts: Dict[str, int]) -> Optional[str]:
 
         coverage = sum(counts)
         if coverage == 0 or coverage < self._minimum_coverage:

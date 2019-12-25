@@ -55,9 +55,6 @@ def main():
         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
         return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
 
-    print(f'Normal mean minor allele frequency ... : {mean_minor_allele_frequency_at_homozygote_sites("normal")}')
-    print(f'Tumor mean minor allele frequency .... : {mean_minor_allele_frequency_at_homozygote_sites("tumor")}')
-
     results = {}
 
     results['input'] = defaultdict(dict)
@@ -72,8 +69,10 @@ def main():
 
     results['output']['summary'] = {'snps-total': len(snp_coordinates),
                                     'snps-genotyped': len(genotyped_snp_pairs),
-                                    'heterozygotes-fraction-normal': float('%.2f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs))),
-                                    'heterozygotes-fraction-tumor': float('%.2f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs)))}
+                                    'heterozygotes-fraction-normal': float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs))),
+                                    'heterozygotes-fraction-tumor': float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs))),
+                                    'mean-maf-homozygote-sites-normal': float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal')),
+                                    'mean-maf-homozygote-sites-tumor': float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))}
 
     with open(args.output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

@@ -37,10 +37,10 @@ class TestParsers(unittest.TestCase):
 
         snps = get_snps(positions=positions, genotyper=genotyper, get_counts=get_counts)
 
-        self.assertEqual(snps[0].position, Position(chromosome='chr1', coordinate=1000))
-        self.assertEqual(snps[0].counts, BaseCounts(A=50, C=0, G=0, T=0))
-        self.assertEqual(snps[0].genotype, Genotype(['A', 'A']))
+        self.assertEqual(snps[0]._position, Position(chromosome='chr1', coordinate=1000))
+        self.assertEqual(snps[0]._counts, BaseCounts(A=50, C=0, G=0, T=0))
+        self.assertEqual(snps[0]._genotype, Genotype(['A', 'A']))
 
-        self.assertEqual(snps[1].position, Position(chromosome='chr2', coordinate=5000))
-        self.assertEqual(snps[1].counts, BaseCounts(A=0, C=30, G=30, T=0))
-        self.assertEqual(snps[1].genotype, Genotype(['C', 'G']))
+        self.assertEqual(snps[1]._position, Position(chromosome='chr2', coordinate=5000))
+        self.assertEqual(snps[1]._counts, BaseCounts(A=0, C=30, G=30, T=0))
+        self.assertEqual(snps[1]._genotype, Genotype(['C', 'G']))

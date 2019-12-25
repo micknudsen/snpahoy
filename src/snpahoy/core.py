@@ -1,13 +1,5 @@
-from enum import Enum
-
 from typing import List
 from typing import NamedTuple
-
-
-class GenotypeCategory(Enum):
-    NOTGENOTYPED = 0
-    HOMOZYGOTE = 1
-    HETEROZYGOTE = 2
 
 
 class Genotype:
@@ -19,13 +11,6 @@ class Genotype:
         if not isinstance(other, Genotype):
             return NotImplemented
         return self._genotype == other._genotype
-
-    def category(self) -> GenotypeCategory:
-        if not self._genotype:
-            return GenotypeCategory.NOTGENOTYPED
-        if self._genotype[0] == self._genotype[1]:
-            return GenotypeCategory.HOMOZYGOTE
-        return GenotypeCategory.HETEROZYGOTE
 
 
 class Position(NamedTuple):
@@ -46,9 +31,6 @@ class SNP:
         self._position = position
         self._counts = counts
         self._genotype = genotype
-
-    def category(self) -> GenotypeCategory:
-        return self._genotype.category()
 
     def minor_allele_frequency(self) -> float:
         coverage = sum(self._counts)

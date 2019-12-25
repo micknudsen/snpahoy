@@ -4,7 +4,6 @@ from snpahoy.core import SNP
 from snpahoy.core import BaseCounts
 from snpahoy.core import Position
 from snpahoy.core import Genotype
-from snpahoy.core import GenotypeCategory
 from snpahoy.core import Genotyper
 
 
@@ -42,11 +41,6 @@ class TestGenotyper(unittest.TestCase):
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(bases=['C', 'C']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(bases=['G', 'T']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), Genotype(bases=[]))
-
-    def test_genotype_category(self):
-        self.assertEqual(Genotype(bases=['A', 'A']).category(), GenotypeCategory.HOMOZYGOTE)
-        self.assertEqual(Genotype(bases=['C', 'G']).category(), GenotypeCategory.HETEROZYGOTE)
-        self.assertEqual(Genotype(bases=[]).category(), GenotypeCategory.NOTGENOTYPED)
 
 
 class TestSNP(unittest.TestCase):

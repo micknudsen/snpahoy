@@ -5,6 +5,7 @@ from snpahoy.core import BaseCounts
 from snpahoy.core import Position
 from snpahoy.core import Genotype
 from snpahoy.core import Genotyper
+from snpahoy.core import Sample
 
 
 class TestGenotpe(unittest.TestCase):
@@ -52,3 +53,14 @@ class TestSNP(unittest.TestCase):
         self.assertEqual(snp._position, Position(chromosome='chr1', coordinate=1000))
         self.assertEqual(snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
         self.assertEqual(snp._genotype, Genotype(bases=['A', 'A']))
+
+
+class TestSample(unittest.TestCase):
+
+    def test_create_sample(self):
+        snps = [SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(['A', 'A'])),
+                SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(['C', 'G'])),
+                SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(['C', 'C']))]
+        sample = Sample(name='MySample', snps=snps)
+        self.assertEqual(sample.name, 'MySample')
+        self.assertEqual(sample._snps, snps)

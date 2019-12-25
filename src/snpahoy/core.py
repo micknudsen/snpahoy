@@ -58,27 +58,6 @@ class SNP:
         return sorted(frequencies)[-2]
 
 
-class Sample:
-
-    def __init__(self, snps: List[SNP]) -> None:
-        self._snps = snps
-
-    def number_of_snps(self) -> int:
-        return len(self._snps)
-
-    def number_of_genotyped_snps(self) -> int:
-        return len([snp for snp in self._snps if not snp.category() == GenotypeCategory.NOTGENOTYPED])
-
-    def number_of_homozygous_snps(self) -> int:
-        return len([snp for snp in self._snps if snp.category() == GenotypeCategory.HOMOZYGOTE])
-
-    def number_of_heterozygous_snps(self) -> int:
-        return len([snp for snp in self._snps if snp.category() == GenotypeCategory.HETEROZYGOTE])
-
-    def minor_allele_frequencies_at_homozygous_snps(self) -> List[float]:
-        return [snp.minor_allele_frequency() for snp in self._snps if snp.category() == GenotypeCategory.HOMOZYGOTE]
-
-
 class Genotyper:
 
     def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:

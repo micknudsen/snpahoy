@@ -6,7 +6,6 @@ from snpahoy.core import Position
 from snpahoy.core import Genotype
 from snpahoy.core import GenotypeCategory
 from snpahoy.core import Genotyper
-from snpahoy.core import Sample
 
 
 class TestGenotpe(unittest.TestCase):
@@ -70,27 +69,3 @@ class TestSNP(unittest.TestCase):
                   counts=BaseCounts(A=0, C=0, G=0, T=0),
                   genotype=Genotype(bases=[]))
         self.assertEqual(snp.minor_allele_frequency(), 0.0)
-
-
-class TestSample(unittest.TestCase):
-
-    def setUp(self):
-        self.sample = Sample(snps=[SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(bases=['A', 'A'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(bases=['C', 'G'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(bases=['C', 'C'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=4000), counts=BaseCounts(A=2, C=0, G=3, T=1), genotype=Genotype(bases=[]))])
-
-    def test_number_of_snps(self):
-        self.assertEqual(self.sample.number_of_snps(), 4)
-
-    def test_number_of_genotyped_snps(self):
-        self.assertEqual(self.sample.number_of_genotyped_snps(), 3)
-
-    def test_number_of_homozygous_snps(self):
-        self.assertEqual(self.sample.number_of_homozygous_snps(), 2)
-
-    def test_number_of_heterozygous_snps(self):
-        self.assertEqual(self.sample.number_of_heterozygous_snps(), 1)
-
-    def test_minor_allele_frequencies_at_homozygous_snps(self):
-        self.assertEqual(self.sample.minor_allele_frequencies_at_homozygous_snps(), [0.04, 0.08])

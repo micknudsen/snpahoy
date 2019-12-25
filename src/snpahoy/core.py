@@ -42,6 +42,9 @@ class Sample:
     def number_of_snps(self) -> int:
         return len(self._snps)
 
+    def number_of_genotyped_snps(self) -> int:
+        return sum(1 for snp in self._snps if snp.is_genotyped())
+
 
 class Genotyper:
 

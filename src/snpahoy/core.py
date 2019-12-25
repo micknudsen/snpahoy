@@ -11,9 +11,12 @@ class SNP:
         self._counts = counts
 
     def minor_allele_frequency(self) -> float:
+
         coverage = sum(self._counts.values())
+
         if coverage == 0:
             return 0.0
+
         frequencies = [count / coverage for count in self._counts.values()]
         return sorted(frequencies)[-2]
 

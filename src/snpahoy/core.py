@@ -41,7 +41,8 @@ class Genotype:
 #         return sorted(self.counts, reverse=True)[1] / self.coverage()
 
 
-# class Genotyper:
+class Genotyper:
+    pass
 
 #     def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:
 #         self.minimum_coverage = minimum_coverage

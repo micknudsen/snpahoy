@@ -48,6 +48,9 @@ class Sample:
     def number_of_homozygous_snps(self) -> int:
         return sum(1 for snp in self._snps if snp.is_homozygous())
 
+    def number_of_heterozygous_snps(self) -> int:
+        return sum(1 for snp in self._snps if snp.is_heterozygous())
+
 
 class Genotyper:
 

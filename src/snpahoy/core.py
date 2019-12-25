@@ -1,11 +1,17 @@
 from typing import List
 from typing import NamedTuple
-# from snpahoy.structures import Counts
 
 
 class Position(NamedTuple):
     chromosome: str
     coordinate: int
+
+
+class BaseCounts(NamedTuple):
+    A: int
+    C: int
+    G: int
+    T: int
 
 
 class Genotype:

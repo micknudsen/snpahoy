@@ -1,5 +1,6 @@
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 
 
 class Position(NamedTuple):
@@ -47,7 +48,8 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-#     def genotype(self, counts: Counts) -> GenotypeClass:
+    def genotype(self, counts: BaseCounts) -> Optional[Genotype]:
+        pass
 
 #         coverage = sum(counts)
 #         if coverage == 0 or coverage < self.minimum_coverage:

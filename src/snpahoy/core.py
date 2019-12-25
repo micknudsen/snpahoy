@@ -10,10 +10,10 @@ class Position(NamedTuple):
 
 class SNP:
 
-    def __init__(self, position: Position, counts: Dict[str, int], genotype: str) -> None:
+    def __init__(self, position: Position, genotype: str, counts: Dict[str, int]) -> None:
         self._position = position
-        self._counts = counts
         self._genotype = genotype
+        self._counts = counts
 
     def minor_allele_frequency(self) -> float:
         coverage = sum(self._counts.values())

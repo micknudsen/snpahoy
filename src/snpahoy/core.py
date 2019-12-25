@@ -27,7 +27,6 @@ class Genotype:
 
 
 class SNP:
-    pass
 
     def __init__(self, position: Position, counts: BaseCounts, genotype: Genotype):
         self._position = position
@@ -36,7 +35,9 @@ class SNP:
 
 
 class Sample:
-    pass
+
+    def __init__(self, snps: List[SNP]) -> None:
+        self._snps = snps
 
 
 class Genotyper:

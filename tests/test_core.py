@@ -61,6 +61,5 @@ class TestSample(unittest.TestCase):
         snps = [SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(['A', 'A'])),
                 SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(['C', 'G'])),
                 SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(['C', 'C']))]
-        sample = Sample(name='MySample', snps=snps)
-        self.assertEqual(sample.name, 'MySample')
+        sample = Sample(snps=snps)
         self.assertEqual(sample._snps, snps)

@@ -3,23 +3,7 @@ import unittest
 from snpahoy.core import SNP
 from snpahoy.core import BaseCounts
 from snpahoy.core import Position
-from snpahoy.core import Genotype
 from snpahoy.core import Genotyper
-
-
-class TestGenotpe(unittest.TestCase):
-
-    def test_create_genotype(self):
-        self.assertEqual(Genotype(bases=['A', 'A'])._genotype, 'AA')
-        self.assertEqual(Genotype(bases=['C', 'G'])._genotype, 'CG')
-        self.assertEqual(Genotype(bases=['G', 'C'])._genotype, 'CG')
-
-    def test_genotype_equality(self):
-        self.assertEqual(Genotype(bases=['A', 'A']), Genotype(bases=['A', 'A']))
-        self.assertEqual(Genotype(bases=['G', 'C']), Genotype(bases=['C', 'G']))
-
-    def test_comparison_with_non_genotype_object(self):
-        self.assertNotEqual(Genotype(bases=['A', 'A']), 'AA')
 
 
 class TestBaseCounts(unittest.TestCase):
@@ -53,7 +37,7 @@ class TestSNP(unittest.TestCase):
     def test_create_snp(self):
         self.assertEqual(self.snp._position, Position(chromosome='chr1', coordinate=1000))
         self.assertEqual(self.snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
-        self.assertEqual(self.snp._genotype, Genotype(bases=['A', 'A']))
+        self.assertEqual(self.snp._genotype, 'AA')
 
     def test_minor_allele_frequency(self):
         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
@@ -61,5 +45,5 @@ class TestSNP(unittest.TestCase):
     def test_minor_allele_frequency_at_uncovered_position(self):
         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
                   counts=BaseCounts(A=0, C=0, G=0, T=0),
-                  genotype=Genotype(bases=[]))
+                  genotype=None)
         self.assertEqual(snp.minor_allele_frequency(), 0.0)

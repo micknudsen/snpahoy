@@ -1,6 +1,25 @@
+from enum import Enum
+
 from typing import List
 from typing import NamedTuple
 from typing import Optional
+
+
+class GenotypeCategory(Enum):
+    NOTGENOTYPED = 0
+    HOMOZYGOTE = 1
+    HETEROZYGOTE = 2
+
+
+class Genotype:
+
+    def __init__(self, bases: List[str]) -> None:
+        self._genotype = ''.join(sorted(bases))
+
+    def __eq__(self, other: object):
+        if not isinstance(other, Genotype):
+            return NotImplemented
+        return self._genotype == other._genotype
 
 
 class Position(NamedTuple):
@@ -13,17 +32,6 @@ class BaseCounts(NamedTuple):
     C: int
     G: int
     T: int
-
-
-class Genotype:
-
-    def __init__(self, bases: List[str]) -> None:
-        self._genotype = ''.join(sorted(bases))
-
-    def __eq__(self, other: object):
-        if not isinstance(other, Genotype):
-            return NotImplemented
-        return self._genotype == other._genotype
 
 
 class SNP:

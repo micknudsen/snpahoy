@@ -68,11 +68,13 @@ def main():
                                     'homozygosity-threshold': args.homozygosity_threshold}
 
     results['output']['summary'] = {'snps-total': len(snp_coordinates),
-                                    'snps-genotyped': len(genotyped_snp_pairs),
-                                    'heterozygotes-fraction-normal': float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs))),
-                                    'heterozygotes-fraction-tumor': float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs))),
-                                    'mean-maf-homozygote-sites-normal': float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal')),
-                                    'mean-maf-homozygote-sites-tumor': float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))}
+                                    'snps-genotyped': len(genotyped_snp_pairs)}
+
+    if genotyped_snp_pairs:
+        results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs)))
+        results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs)))
+        results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal'))
+        results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))
 
     with open(args.output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

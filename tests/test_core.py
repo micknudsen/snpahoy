@@ -36,11 +36,11 @@ class TestGenotyper(unittest.TestCase):
 
     def test_genotyper(self):
         genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
-        self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), Genotype(bases=['A', 'A']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(bases=['C', 'G']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(bases=['C', 'C']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(bases=['G', 'T']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), Genotype(bases=[]))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), 'AA')
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), 'CG')
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), 'CC')
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), 'GT')
+        self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), None)
 
 
 class TestSNP(unittest.TestCase):

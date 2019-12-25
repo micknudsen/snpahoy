@@ -5,6 +5,7 @@ from pysam import AlignmentFile
 from snpahoy.core import Position
 from snpahoy.core import BaseCounts
 from snpahoy.core import Genotyper
+from snpahoy.core import Sample
 
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
@@ -38,6 +39,8 @@ def main():
     tumor_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), position=position))
     normal_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.normal_bam_file), position=position))
 
+    tumor = Sample(snps=tumor_snps)
+    normal = Sample(snps=normal_snps)
+
     # Just testing...
-    print(len(tumor_snps))
-    print(len(normal_snps))
+    print(tumor, normal)

@@ -7,13 +7,6 @@ class Position(NamedTuple):
     coordinate: int
 
 
-class BaseCounts(NamedTuple):
-    A: int
-    C: int
-    G: int
-    T: int
-
-
 class SNP:
 
     def __init__(self, position: Position, counts: BaseCounts, genotype: str) -> None:

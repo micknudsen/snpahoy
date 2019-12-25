@@ -18,6 +18,9 @@ class TestGenotpe(unittest.TestCase):
         self.assertEqual(Genotype(bases=['A', 'A']), Genotype(bases=['A', 'A']))
         self.assertEqual(Genotype(bases=['G', 'C']), Genotype(bases=['C', 'G']))
 
+    def test_comparison_with_non_genotype_object(self):
+        self.assertNotEqual(Genotype(bases=['A', 'A']), 'AA')
+
 
 # class TestSNP(unittest.TestCase):
 

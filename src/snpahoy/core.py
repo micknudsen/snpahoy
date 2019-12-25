@@ -35,6 +35,10 @@ class SNP:
         self._genotype = genotype
 
 
+class Sample:
+    pass
+
+
 class Genotyper:
 
     def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:

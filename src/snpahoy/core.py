@@ -51,16 +51,16 @@ class Sample:
         return len(self._snps)
 
     def number_of_genotyped_snps(self) -> int:
-        return sum(1 for snp in self._snps if snp.is_genotyped())
+        return len([snp for snp in self._snps if not snp.category() == GenotypeCategory.NOTGENOTYPED])
 
     def number_of_homozygous_snps(self) -> int:
-        return sum(1 for snp in self._snps if snp.is_homozygous())
+        return len([snp for snp in self._snps if snp.category() == GenotypeCategory.HOMOZYGOTE])
 
     def number_of_heterozygous_snps(self) -> int:
-        return sum(1 for snp in self._snps if snp.is_heterozygous())
+        return len([snp for snp in self._snps if snp.category() == GenotypeCategory.HETEROZYGOTE])
 
     def minor_allele_frequencies_at_homozygous_snps(self) -> List[float]:
-        return [snp.minor_allele_frequency() for snp in self._snps if snp.is_homozygous()]
+        return [snp.minor_allele_frequency() for snp in self._snps if snp.category() == GenotypeCategory.HOMOZYGOTE]
 
 
 class Genotyper:

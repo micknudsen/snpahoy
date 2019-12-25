@@ -1,7 +1,7 @@
 import unittest
 
 # from snpahoy.core import SNP
-# from snpahoy.core import Counts
+from snpahoy.core import BaseCounts
 # from snpahoy.core import Position
 from snpahoy.core import Genotype
 # from snpahoy.core import Genotyper
@@ -20,6 +20,16 @@ class TestGenotpe(unittest.TestCase):
 
     def test_comparison_with_non_genotype_object(self):
         self.assertNotEqual(Genotype(bases=['A', 'A']), 'AA')
+
+
+class TestBaseCounts(unittest.TestCase):
+
+    def test_create_base_counts(self):
+        counts = BaseCounts(A=10, C=30, G=0, T=25)
+        self.assertEqual(counts.A, 10)
+        self.assertEqual(counts.C, 30)
+        self.assertEqual(counts.G, 0)
+        self.assertEqual(counts.T, 25)
 
 
 # class TestSNP(unittest.TestCase):

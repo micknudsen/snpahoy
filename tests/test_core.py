@@ -26,6 +26,9 @@ class TestSNP(unittest.TestCase):
         self.assertEqual(self.snp._genotype, 'AA')
         self.assertEqual(self.snp._counts, {'A': 95, 'C': 1, 'G': 3, 'T': 1})
 
+    def test_get_genotype(self):
+        self.assertEqual(self.snp.genotype, 'AA')
+
     def test_minor_allele_frequency(self):
         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
 

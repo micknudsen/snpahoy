@@ -23,12 +23,17 @@ def main():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--bed_file', type=str, required=True)
-    parser.add_argument('--tumor_bam_file', type=str, required=True)
-    parser.add_argument('--normal_bam_file', type=str, required=True)
-    parser.add_argument('--output_json_file', type=str, required=True)
-    parser.add_argument('--minimum_coverage', type=int, default=30)
-    parser.add_argument('--homozygosity_threshold', type=float, default=0.95)
+    parser.add_argument('--bed_file', type=str, required=True, help="BED file with SNP postions")
+    parser.add_argument('--tumor_bam_file', type=str, required=True, help="Tumor BAM file. Must be indexed.")
+    parser.add_argument('--normal_bam_file', type=str, required=True, help="Normal BAM file. Must be indexed.")
+    parser.add_argument('--output_json_file', type=str, required=True, help="JSON output file")
+    parser.add_argument('--minimum_coverage', type=int, default=30, help="Only consider SNP positions with a lest this coverage in both tumor and normal (default: %(default)s).")
+    parser.add_argument('--homozygosity_threshold', type=float, default=0.95, help="Consider a SNP position homozygote if frequency of most common allele is this or higher (default: %(default)s).")
+
+    # parser.add_argument('fastq', help='path to input FASTQ file')
+    # parser.add_argument('--limit', '-n', type=int, required=False, help='maximal number of reads to consider')
+    # parser.add_argument('--adapters', '-a', required=False, default=default_adapters, help='commma-separated list of adapters (default: %(default)s)')
+
 
     args = parser.parse_args()
 

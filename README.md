@@ -2,7 +2,7 @@
 
 # SNP Ahoy!
 
-Calculate various measures for identifying sample swaps and contamination in paired tumor-normal sequencing. Developed with the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel in mind.
+Calculates various measures for identifying sample swaps and contamination in paired tumor-normal sequencing.
 
 ```
 % snpahoy --help
@@ -28,7 +28,7 @@ optional arguments:
                         most common allele is this or higher (default: 0.95).
 ```
 
-See example output JSON file below. The homozygote sites used in the mean MAF calculations are the homozygote sites in the normal sample. For the MSK IMPACT panel, suggested (upper) cut-offs are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.
+See example output JSON file below. The homozygote sites used in the mean MAF calculations are the homozygote sites in the normal sample. For the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel, suggested (upper) cut-offs are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.
 
 ```
 {

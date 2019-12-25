@@ -1,8 +1,8 @@
 import unittest
 
-# from snpahoy.core import SNP
+from snpahoy.core import SNP
 from snpahoy.core import BaseCounts
-# from snpahoy.core import Position
+from snpahoy.core import Position
 from snpahoy.core import Genotype
 from snpahoy.core import Genotyper
 
@@ -35,9 +35,7 @@ class TestBaseCounts(unittest.TestCase):
 class TestGenotyper(unittest.TestCase):
 
     def test_genotyper(self):
-
         genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
-
         self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), Genotype(['A', 'A']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(['C', 'G']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(['C', 'C']))
@@ -45,21 +43,12 @@ class TestGenotyper(unittest.TestCase):
         self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), None)
 
 
-# class TestSNP(unittest.TestCase):
+class TestSNP(unittest.TestCase):
 
-#     def setUp(self):
-#         self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-#                        counts=Counts(a=95, c=1, g=3, t=1),
-#                        genotype=('A', 'A'))
-
-#     def test_coverage(self):
-#         self.assertEqual(self.snp.coverage(), 100)
-
-#     def test_minor_allele_frequency(self):
-#         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
-
-#     def test_minor_allele_frequency_uncovered_position(self):
-#         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-#                   counts=Counts(a=0, c=0, g=0, t=0),
-#                   genotype=None)
-#         self.assertEqual(snp.minor_allele_frequency(), 0.0)
+    def test_create_snp(self):
+        snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
+                  counts=BaseCounts(A=95, C=1, G=3, T=1),
+                  genotype=Genotype(bases=['A', 'A']))
+        self.assertEqual(snp.position, Position(chromosome='chr1', coordinate=1000))
+        self.assertEqual(snp.counts, BaseCounts(A=95, C=1, G=3, T=1))
+        self.assertEqual(snp.genotype, Genotype(bases=['A', 'A']))

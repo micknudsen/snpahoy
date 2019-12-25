@@ -35,16 +35,8 @@ def main():
     genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
                           homozygosity_threshold=args.homozygosity_threshold)
 
-    tumor_alignment = AlignmentFile(args.tumor_bam_file)
-    normal_alignment = AlignmentFile(args.normal_bam_file)
-
-    tumor_snps = get_snps(positions=positions,
-                          genotyper=genotyper,
-                          get_counts=lambda position: get_counts(alignment=tumor_alignment, position=position))
-
-    normal_snps = get_snps(positions=positions,
-                           genotyper=genotyper,
-                           get_counts=lambda position: get_counts(alignment=normal_alignment, position=position))
+    tumor_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), position=position))
+    normal_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.normal_bam_file), position=position))
 
     # Just testing...
     print(len(tumor_snps))

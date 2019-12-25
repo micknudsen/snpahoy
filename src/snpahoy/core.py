@@ -49,14 +49,15 @@ class Genotyper:
         self._homozygosity_threshold = homozygosity_threshold
 
     def genotype(self, counts: BaseCounts) -> Optional[Genotype]:
-        pass
 
-#         coverage = sum(counts)
-#         if coverage == 0 or coverage < self.minimum_coverage:
-#             return GenotypeClass.LOWCOVERAGE
+        coverage = sum(counts)
+        if coverage == 0 or coverage < self._minimum_coverage:
+            return None
 
-#         frequencies = [count / coverage for count in counts]
-#         if max(frequencies) < self.homozygosity_threshold:
-#             return GenotypeClass.HETEROZYGOTE
+        counts_dict = counts._asdict()
+        bases_ordered_by_count = sorted(counts_dict, key=counts_dict.get, reverse=True)
 
-#         return GenotypeClass.HOMOZYGOTE
+        frequencies = [count / coverage for count in counts]
+        if max(frequencies) < self._homozygosity_threshold:
+            return Genotype(bases=bases_ordered_by_count[:2])
+        return Genotype(bases=bases_ordered_by_count[0] * 2)

@@ -1,9 +1,11 @@
-from typing import Iterable, List
+from typing import Callable
+from typing import Iterable
+from typing import List
 
-# from snpahoy.core import SNP
-# from snpahoy.core import Counts
+from snpahoy.core import SNP
+from snpahoy.core import BaseCounts
 from snpahoy.core import Position
-# from snpahoy.core import Genotyper
+from snpahoy.core import Genotyper
 
 
 def parse_bed_file(stream: Iterable[str]) -> List[Position]:
@@ -15,7 +17,9 @@ def parse_bed_file(stream: Iterable[str]) -> List[Position]:
     return result
 
 
-# def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], Counts]) -> List[SNP]:
+def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], BaseCounts]) -> List[SNP]:
+    pass
+
 #     result: List[SNP] = []
 #     for position in positions:
 #         counts = get_counts(position=position)

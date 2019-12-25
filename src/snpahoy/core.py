@@ -24,14 +24,9 @@ class SNP:
         return len(set(list(self._genotype))) == 1
 
     def minor_allele_frequency(self) -> float:
-
-        coverage = sum(self._counts.values())
-
-        if coverage == 0:
+        if self.depth == 0:
             return 0.0
-
-        frequencies = [count / coverage for count in self._counts.values()]
-        return sorted(frequencies)[-2]
+        return sorted([count / self.depth for count in self._counts.values()])[-2]
 
 
 class Genotyper:

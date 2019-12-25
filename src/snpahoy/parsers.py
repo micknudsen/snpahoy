@@ -17,9 +17,9 @@ def parse_bed_file(stream: Iterable[str]) -> List[Tuple[str, int]]:
     return result
 
 
-def get_snps(positions: List[Tuple[str, int]], genotyper: Genotyper, get_counts=Callable[[str, int], Dict[str, int]]) -> List[SNP]:
+def get_snps(coordinates: List[Tuple[str, int]], genotyper: Genotyper, get_counts=Callable[[str, int], Dict[str, int]]) -> List[SNP]:
     result: List[SNP] = []
-    for chromosome, position in positions:
+    for chromosome, position in coordinates:
         counts = get_counts(chromosome, position)
         genotype = genotyper.genotype(counts=counts)
         result.append(SNP(chromosome=chromosome, position=position, counts=counts, genotype=genotype))

@@ -23,8 +23,8 @@ class TestSNP(unittest.TestCase):
     def test_create_snp(self):
         self.assertEqual(self.snp._chromosome, 'chr1')
         self.assertEqual(self.snp._position, 1000)
-        self.assertEqual(self.snp._counts, {'A': 95, 'C': 1, 'G': 3, 'T': 1})
         self.assertEqual(self.snp._genotype, 'AA')
+        self.assertEqual(self.snp._counts, {'A': 95, 'C': 1, 'G': 3, 'T': 1})
 
     def test_minor_allele_frequency(self):
         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)

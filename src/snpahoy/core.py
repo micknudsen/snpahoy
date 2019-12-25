@@ -39,6 +39,9 @@ class Sample:
     def __init__(self, snps: List[SNP]) -> None:
         self._snps = snps
 
+    def number_of_snps(self) -> int:
+        return len(self._snps)
+
 
 class Genotyper:
 

@@ -10,6 +10,10 @@ class SNP:
         self._genotype = genotype
         self._counts = counts
 
+    @property
+    def genotype(self) -> str:
+        return self._genotype
+
     def minor_allele_frequency(self) -> float:
 
         coverage = sum(self._counts.values())

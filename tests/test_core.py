@@ -52,13 +52,24 @@ class TestGenotyper(unittest.TestCase):
 
 class TestSNP(unittest.TestCase):
 
+    def setUp(self):
+        self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
+                       counts=BaseCounts(A=95, C=1, G=3, T=1),
+                       genotype=Genotype(bases=['A', 'A']))
+
     def test_create_snp(self):
+        self.assertEqual(self.snp._position, Position(chromosome='chr1', coordinate=1000))
+        self.assertEqual(self.snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
+        self.assertEqual(self.snp._genotype, Genotype(bases=['A', 'A']))
+
+    def test_minor_allele_frequency(self):
+        self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
+
+    def test_minor_allele_frequency_at_uncovered_position(self):
         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-                  counts=BaseCounts(A=95, C=1, G=3, T=1),
-                  genotype=Genotype(bases=['A', 'A']))
-        self.assertEqual(snp._position, Position(chromosome='chr1', coordinate=1000))
-        self.assertEqual(snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
-        self.assertEqual(snp._genotype, Genotype(bases=['A', 'A']))
+                  counts=BaseCounts(A=0, C=0, G=0, T=0),
+                  genotype=Genotype(bases=[]))
+        self.assertEqual(snp.minor_allele_frequency(), 0.0)
 
 
 class TestSample(unittest.TestCase):

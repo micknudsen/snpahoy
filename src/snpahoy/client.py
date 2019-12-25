@@ -36,17 +36,12 @@ def main():
     normal_snps = get_snps(coordinates=coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.normal_bam_file), chromosome=chromosome, position=position))
     tumor_snps = get_snps(coordinates=coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), chromosome=chromosome, position=position))
 
-    number_of_genotyped_snps = 0
-    # number_of_heterozygous_sites = {'normal': 0, 'tumor': 0}
+    genotyped_snp_pairs = []
 
     for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
-
-        normal_genotype = normal_snp.genotype
-        tumor_genotype = tumor_snp.genotype
-
-        if normal_genotype and tumor_genotype:
-            number_of_genotyped_snps += 1
+        if normal_snp.genotype and tumor_snp.genotype:
+            genotyped_snp_pairs.append([normal_snp, tumor_snp])
 
     print(f'Minimum coverage ........ ...: {args.minimum_coverage}')
     print(f'Homozygosity threshold ..... : {args.homozygosity_threshold}')
-    print(f'Number of genotyped SNPs ... : {number_of_genotyped_snps}')
+    print(f'Number of genotyped SNPs ... : {len(genotyped_snp_pairs)}')

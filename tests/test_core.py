@@ -44,6 +44,11 @@ class TestGenotyper(unittest.TestCase):
         self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(bases=['G', 'T']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), Genotype(bases=[]))
 
+    def test_genotype_category(self):
+        self.assertEqual(Genotype(bases=['A', 'A']).category(), GenotypeCategory.HOMOZYGOTE)
+        self.assertEqual(Genotype(bases=['C', 'G']).category(), GenotypeCategory.HETEROZYGOTE)
+        self.assertEqual(Genotype(bases=[]).category(), GenotypeCategory.NOTGENOTYPED)
+
 
 class TestSNP(unittest.TestCase):
 
@@ -54,11 +59,6 @@ class TestSNP(unittest.TestCase):
         self.assertEqual(snp._position, Position(chromosome='chr1', coordinate=1000))
         self.assertEqual(snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
         self.assertEqual(snp._genotype, Genotype(bases=['A', 'A']))
-
-    def test_genotype_category(self):
-        self.assertEqual(Genotype(bases=['A', 'A']).category(), GenotypeCategory.HOMOZYGOTE)
-        self.assertEqual(Genotype(bases=['C', 'G']).category(), GenotypeCategory.HETEROZYGOTE)
-        self.assertEqual(Genotype(bases=[]).category(), GenotypeCategory.NOTGENOTYPED)
 
 
 class TestSample(unittest.TestCase):

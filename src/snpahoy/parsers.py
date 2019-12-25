@@ -18,11 +18,9 @@ def parse_bed_file(stream: Iterable[str]) -> List[Position]:
 
 
 def get_snps(positions: List[Position], genotyper: Genotyper, get_counts=Callable[[Position], BaseCounts]) -> List[SNP]:
-    pass
-
-#     result: List[SNP] = []
-#     for position in positions:
-#         counts = get_counts(position=position)
-#         genotype = genotyper.genotype(counts=counts)
-#         result.append(SNP(position=position, counts=counts, genotype=genotype))
-#     return result
+    result: List[SNP] = []
+    for position in positions:
+        counts = get_counts(position=position)
+        genotype = genotyper.genotype(counts=counts)
+        result.append(SNP(position=position, counts=counts, genotype=genotype))
+    return result

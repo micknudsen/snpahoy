@@ -1,11 +1,11 @@
 from typing import Dict
-from typing import NamedTuple
 from typing import Optional
 
 
 class SNP:
 
-    def __init__(self, position: Position, genotype: str, counts: Dict[str, int]) -> None:
+    def __init__(self, chromosome: str, position: int, genotype: str, counts: Dict[str, int]) -> None:
+        self._chromosome = chromosome
         self._position = position
         self._genotype = genotype
         self._counts = counts

@@ -48,6 +48,9 @@ class SNP:
         self._counts = counts
         self._genotype = genotype
 
+    def category(self) -> GenotypeCategory:
+        return self._genotype.category()
+
 
 class Sample:
 

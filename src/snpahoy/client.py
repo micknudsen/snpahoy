@@ -5,7 +5,6 @@ from pysam import AlignmentFile
 from snpahoy.core import Position
 from snpahoy.core import BaseCounts
 from snpahoy.core import Genotyper
-from snpahoy.core import Sample
 
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
@@ -36,11 +35,11 @@ def main():
     genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
                           homozygosity_threshold=args.homozygosity_threshold)
 
-    tumor_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), position=position))
     normal_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.normal_bam_file), position=position))
+    tumor_snps = get_snps(positions=positions, genotyper=genotyper, get_counts=lambda position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), position=position))
 
-    tumor = Sample(snps=tumor_snps)
-    normal = Sample(snps=normal_snps)
+    selected_snp_pairs = []
 
-    # Just testing...
-    print(tumor, normal)
+    for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
+        if normal_snp.is_genotyped() and tumor_snp.is_genotyped():
+            selected_snp_pairs.append([normal_snp, tumor_snp])

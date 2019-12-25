@@ -14,6 +14,11 @@ class SNP:
     def genotype(self) -> str:
         return self._genotype
 
+    def is_homozygote(self) -> bool:
+        if not self._genotype:
+            return False
+        return len(set(list(self._genotype))) == 1
+
     def minor_allele_frequency(self) -> float:
 
         coverage = sum(self._counts.values())

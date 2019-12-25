@@ -34,14 +34,6 @@ class SNP:
         self._counts = counts
         self._genotype = genotype
 
-#     def coverage(self) -> int:
-#         return sum(self.counts)
-
-#     def minor_allele_frequency(self) -> float:
-#         if self.coverage() == 0:
-#             return 0.0
-#         return sorted(self.counts, reverse=True)[1] / self.coverage()
-
 
 class Genotyper:
 

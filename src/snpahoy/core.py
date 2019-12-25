@@ -29,10 +29,10 @@ class Genotype:
 class SNP:
     pass
 
-#     def __init__(self, position: Position, counts: Counts, genotype: GenotypeClass):
-#         self.position = position
-#         self.counts = counts
-#         self.genotype = genotype
+    def __init__(self, position: Position, counts: BaseCounts, genotype: Genotype):
+        self._position = position
+        self._counts = counts
+        self._genotype = genotype
 
 #     def coverage(self) -> int:
 #         return sum(self.counts)

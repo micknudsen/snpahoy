@@ -1,7 +1,6 @@
 import unittest
 
 from snpahoy.core import SNP
-from snpahoy.core import Position
 from snpahoy.core import Genotyper
 
 
@@ -19,12 +18,11 @@ class TestGenotyper(unittest.TestCase):
 class TestSNP(unittest.TestCase):
 
     def setUp(self):
-        self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-                       counts={'A': 95, 'C': 1, 'G': 3, 'T': 1},
-                       genotype='AA')
+        self.snp = SNP(chromosome='chr1', position=1000, genotype='AA', counts={'A': 95, 'C': 1, 'G': 3, 'T': 1})
 
     def test_create_snp(self):
-        self.assertEqual(self.snp._position, Position(chromosome='chr1', coordinate=1000))
+        self.assertEqual(self.snp._chromosome, 'chr1')
+        self.assertEqual(self.snp._position, 1000)
         self.assertEqual(self.snp._counts, {'A': 95, 'C': 1, 'G': 3, 'T': 1})
         self.assertEqual(self.snp._genotype, 'AA')
 
@@ -32,7 +30,5 @@ class TestSNP(unittest.TestCase):
         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
 
     def test_minor_allele_frequency_at_uncovered_position(self):
-        snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
-                  counts={'A': 0, 'C': 0, 'G':0, 'T': 0},
-                  genotype=None)
+        snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G':0, 'T': 0})
         self.assertEqual(snp.minor_allele_frequency(), 0.0)

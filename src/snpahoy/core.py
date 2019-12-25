@@ -3,11 +3,6 @@ from typing import NamedTuple
 from typing import Optional
 
 
-class Position(NamedTuple):
-    chromosome: str
-    coordinate: int
-
-
 class SNP:
 
     def __init__(self, position: Position, genotype: str, counts: Dict[str, int]) -> None:

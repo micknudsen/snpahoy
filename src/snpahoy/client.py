@@ -6,7 +6,7 @@ import argparse
 # from snpahoy.core import Genotyper
 # from snpahoy.core import GenotypeClass
 
-# from snpahoy.parsers import get_snps
+from snpahoy.parsers import parse_bed_file
 # from snpahoy.parsers import get_positions
 
 
@@ -21,16 +21,19 @@ def main():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--snp_bed_file', type=str, required=True)
+    parser.add_argument('--bed_file', type=str, required=True)
     parser.add_argument('--tumor_bam_file', type=str, required=True)
     parser.add_argument('--normal_bam_file', type=str, required=True)
     parser.add_argument('--minimum_coverage', type=int, default=30)
     parser.add_argument('--homozygosity_threshold', type=float, default=0.95)
 
-    # args = parser.parse_args()
+    args = parser.parse_args()
 
-    # with open(args.snp_bed_file, 'rt') as f:
-    #     positions = get_positions(f.read().splitlines())
+    with open(args.bed_file, 'rt') as f:
+        positions = parse_bed_file(f.read().splitlines())
+
+    # Just testing...
+    print(len(positions))
 
     # genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
     #                       homozygosity_threshold=args.homozygosity_threshold)

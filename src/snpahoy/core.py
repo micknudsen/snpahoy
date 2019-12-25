@@ -42,11 +42,10 @@ class Genotype:
 
 
 class Genotyper:
-    pass
 
-#     def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:
-#         self.minimum_coverage = minimum_coverage
-#         self.homozygosity_threshold = homozygosity_threshold
+    def __init__(self, minimum_coverage: int, homozygosity_threshold: float) -> None:
+        self._minimum_coverage = minimum_coverage
+        self._homozygosity_threshold = homozygosity_threshold
 
 #     def genotype(self, counts: Counts) -> GenotypeClass:
 

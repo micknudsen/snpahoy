@@ -32,7 +32,7 @@ class TestSNP(unittest.TestCase):
     def setUp(self):
         self.snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
                        counts=BaseCounts(A=95, C=1, G=3, T=1),
-                       genotype=Genotype(bases=['A', 'A']))
+                       genotype='AA')
 
     def test_create_snp(self):
         self.assertEqual(self.snp._position, Position(chromosome='chr1', coordinate=1000))

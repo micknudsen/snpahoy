@@ -1,16 +1,5 @@
-from typing import List
 from typing import NamedTuple
-
-
-class Genotype:
-
-    def __init__(self, bases: List[str]) -> None:
-        self._genotype = ''.join(sorted(bases))
-
-    def __eq__(self, other: object):
-        if not isinstance(other, Genotype):
-            return NotImplemented
-        return self._genotype == other._genotype
+from typing import Optional
 
 
 class Position(NamedTuple):
@@ -27,7 +16,7 @@ class BaseCounts(NamedTuple):
 
 class SNP:
 
-    def __init__(self, position: Position, counts: BaseCounts, genotype: Genotype) -> None:
+    def __init__(self, position: Position, counts: BaseCounts, genotype: str) -> None:
         self._position = position
         self._counts = counts
         self._genotype = genotype
@@ -46,16 +35,16 @@ class Genotyper:
         self._minimum_coverage = minimum_coverage
         self._homozygosity_threshold = homozygosity_threshold
 
-    def genotype(self, counts: BaseCounts) -> Genotype:
+    def genotype(self, counts: BaseCounts) -> Optional[str]:
 
         coverage = sum(counts)
         if coverage == 0 or coverage < self._minimum_coverage:
-            return Genotype(bases=[])
+            return None
 
         counts_dict = counts._asdict()
         bases_ordered_by_count = sorted(counts_dict, key=counts_dict.get, reverse=True)
 
         frequencies = [count / coverage for count in counts]
         if max(frequencies) < self._homozygosity_threshold:
-            return Genotype(bases=bases_ordered_by_count[:2])
-        return Genotype(bases=bases_ordered_by_count[0] * 2)
+            return ''.join(bases_ordered_by_count[:2])
+        return ''.join(bases_ordered_by_count[0] * 2)

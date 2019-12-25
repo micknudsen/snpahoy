@@ -2,7 +2,6 @@ import unittest
 
 from snpahoy.core import BaseCounts
 from snpahoy.core import Position
-from snpahoy.core import Genotype
 from snpahoy.core import Genotyper
 
 from snpahoy.parsers import get_snps
@@ -39,8 +38,8 @@ class TestParsers(unittest.TestCase):
 
         self.assertEqual(snps[0]._position, Position(chromosome='chr1', coordinate=1000))
         self.assertEqual(snps[0]._counts, BaseCounts(A=50, C=0, G=0, T=0))
-        self.assertEqual(snps[0]._genotype, Genotype(['A', 'A']))
+        self.assertEqual(snps[0]._genotype, 'AA')
 
         self.assertEqual(snps[1]._position, Position(chromosome='chr2', coordinate=5000))
         self.assertEqual(snps[1]._counts, BaseCounts(A=0, C=30, G=30, T=0))
-        self.assertEqual(snps[1]._genotype, Genotype(['C', 'G']))
+        self.assertEqual(snps[1]._genotype, 'CG')

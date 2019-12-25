@@ -26,7 +26,8 @@ class Genotype:
         return self._genotype == other._genotype
 
 
-# class SNP:
+class SNP:
+    pass
 
 #     def __init__(self, position: Position, counts: Counts, genotype: GenotypeClass):
 #         self.position = position

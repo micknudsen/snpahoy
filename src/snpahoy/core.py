@@ -50,6 +50,13 @@ class SNP:
     def category(self) -> GenotypeCategory:
         return self._genotype.category()
 
+    def minor_allele_frequency(self) -> float:
+        coverage = sum(self._counts)
+        if coverage == 0:
+            return 0.0
+        frequencies = [count / coverage for count in self._counts]
+        return sorted(frequencies)[-2]
+
 
 class Sample:
 

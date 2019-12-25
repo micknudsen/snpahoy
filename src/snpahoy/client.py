@@ -1,7 +1,10 @@
 import argparse
+import json
+import os
 
-from typing import Dict
 from statistics import mean
+from typing import Dict
+
 
 from pysam import AlignmentFile
 
@@ -22,6 +25,7 @@ def main():
     parser.add_argument('--bed_file', type=str, required=True)
     parser.add_argument('--tumor_bam_file', type=str, required=True)
     parser.add_argument('--normal_bam_file', type=str, required=True)
+    parser.add_argument('--output_json_file', type=str, required=False)
     parser.add_argument('--minimum_coverage', type=int, default=30)
     parser.add_argument('--homozygosity_threshold', type=float, default=0.95)
 
@@ -50,10 +54,21 @@ def main():
         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
         return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
 
-    print(f'Minimum coverage ..................... : {args.minimum_coverage}')
-    print(f'Homozygosity threshold ............... : {args.homozygosity_threshold}')
     print(f'Number of genotyped SNPs ............. : {len(genotyped_snp_pairs)}')
     print(f'Normal fraction of heterozygotes ..... : {count_heterozygotes(sample="normal") / len(genotyped_snp_pairs)}')
     print(f'Tumor fraction of heterozygotes ...... : {count_heterozygotes(sample="tumor") / len(genotyped_snp_pairs)}')
     print(f'Normal mean minor allele frequency ... : {mean_minor_allele_frequency_at_homozygote_sites("normal")}')
     print(f'Tumor mean minor allele frequency .... : {mean_minor_allele_frequency_at_homozygote_sites("tumor")}')
+
+    results = {}
+
+    results['input'] = {'bed-file': os.path.basename(args.bed_file),
+                        'normal-bam_file': os.path.basename(args.normal_bam_file),
+                        'tumor-bam-file': os.path.basename(args.tumor_bam_file)}
+
+    results['settings'] = {'minimum-coverage': args.minimum_coverage,
+                           'homozygosity-threshold': args.homozygosity_threshold}
+
+    if args.output_json_file:
+        with open(args.output_json_file, 'w') as json_file_handle:
+            json.dump(results, json_file_handle, indent=4)

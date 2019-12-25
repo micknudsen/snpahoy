@@ -6,6 +6,18 @@ import unittest
 # from snpahoy.core import Genotyper
 
 
+class TestGenotpe(unittest.TestCase):
+
+    def test_create_genotype(self):
+        self.assertEqual(Genotype(bases=['A', 'A'])._genotype, 'AA')
+        self.assertEqual(Genotype(bases=['C', 'G'])._genotype, 'CG')
+        self.assertEqual(Genotype(bases=['G', 'C'])._genotype, 'CG')
+
+    def test_genotype_equality(self):
+        self.assertEqual(Genotype(bases=['A', 'A']), Genotype(bases=['A', 'A']))
+        self.assertEqual(Genotype(bases=['G', 'C']), Genotype(bases=['C', 'G']))
+
+
 # class TestSNP(unittest.TestCase):
 
 #     def setUp(self):

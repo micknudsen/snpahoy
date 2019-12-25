@@ -16,10 +16,10 @@ class SNP:
         self._genotype = genotype
 
     def minor_allele_frequency(self) -> float:
-        coverage = sum(self._counts)
+        coverage = sum(self._counts.values())
         if coverage == 0:
             return 0.0
-        frequencies = [count / coverage for count in self._counts]
+        frequencies = [count / coverage for count in self._counts.values()]
         return sorted(frequencies)[-2]
 
 
@@ -31,14 +31,13 @@ class Genotyper:
 
     def genotype(self, counts: Dict[str, int]) -> Optional[str]:
 
-        coverage = sum(counts)
+        coverage = sum(counts.values())
         if coverage == 0 or coverage < self._minimum_coverage:
             return None
 
-        counts_dict = counts._asdict()
-        bases_ordered_by_count = sorted(counts_dict, key=counts_dict.get, reverse=True)
+        bases_ordered_by_count = sorted(counts, key=counts.get, reverse=True)
 
-        frequencies = [count / coverage for count in counts]
+        frequencies = [count / coverage for count in counts.values()]
         if max(frequencies) < self._homozygosity_threshold:
             return ''.join(bases_ordered_by_count[:2])
         return ''.join(bases_ordered_by_count[0] * 2)

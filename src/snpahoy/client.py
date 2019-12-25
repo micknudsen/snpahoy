@@ -1,20 +1,20 @@
 import argparse
 
-# from pysam import AlignmentFile
+from pysam import AlignmentFile
 
-# from snpahoy.core import Position
-# from snpahoy.core import Genotyper
-# from snpahoy.core import GenotypeClass
+from snpahoy.core import Position
+from snpahoy.core import BaseCounts
+from snpahoy.core import Genotyper
 
+from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
-# from snpahoy.parsers import get_positions
 
 
-# def get_counts(alignment: AlignmentFile, position: Position):
-#     coverage = alignment.count_coverage(contig=position.chromosome,
-#                                         start=position.coordinate,
-#                                         stop=position.coordinate + 1)
-#     return tuple(counts[0] for counts in coverage)
+def get_counts(alignment: AlignmentFile, position: Position) -> BaseCounts:
+    coverage = alignment.count_coverage(contig=position.chromosome,
+                                        start=position.coordinate,
+                                        stop=position.coordinate + 1)
+    return BaseCounts(A=coverage[0][0], C=coverage[1][0], G=coverage[2][0], T=coverage[3][0])
 
 
 def main():
@@ -32,23 +32,20 @@ def main():
     with open(args.bed_file, 'rt') as f:
         positions = parse_bed_file(f.read().splitlines())
 
+    genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
+                          homozygosity_threshold=args.homozygosity_threshold)
+
+    tumor_alignment = AlignmentFile(args.tumor_bam_file)
+    normal_alignment = AlignmentFile(args.normal_bam_file)
+
+    tumor_snps = get_snps(positions=positions,
+                          genotyper=genotyper,
+                          get_counts=lambda position: get_counts(alignment=tumor_alignment, position=position))
+
+    normal_snps = get_snps(positions=positions,
+                           genotyper=genotyper,
+                           get_counts=lambda position: get_counts(alignment=normal_alignment, position=position))
+
     # Just testing...
-    print(len(positions))
-
-    # genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
-    #                       homozygosity_threshold=args.homozygosity_threshold)
-
-    # tumor_alignment = AlignmentFile(args.tumor_bam_file)
-    # normal_alignment = AlignmentFile(args.normal_bam_file)
-
-    # tumor_snps = get_snps(positions=positions,
-    #                       genotyper=genotyper,
-    #                       get_counts=lambda position: get_counts(alignment=tumor_alignment, position=position))
-
-    # normal_snps = get_snps(positions=positions,
-    #                        genotyper=genotyper,
-    #                        get_counts=lambda position: get_counts(alignment=normal_alignment, position=position))
-
-    # # Just testing...
-    # print(len([snp for snp in tumor_snps if snp.genotype == GenotypeClass.HETEROZYGOTE]))
-    # print(len([snp for snp in normal_snps if snp.genotype == GenotypeClass.HETEROZYGOTE]))
+    print(len(tumor_snps))
+    print(len(normal_snps))

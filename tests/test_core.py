@@ -49,6 +49,6 @@ class TestSNP(unittest.TestCase):
         snp = SNP(position=Position(chromosome='chr1', coordinate=1000),
                   counts=BaseCounts(A=95, C=1, G=3, T=1),
                   genotype=Genotype(bases=['A', 'A']))
-        self.assertEqual(snp.position, Position(chromosome='chr1', coordinate=1000))
-        self.assertEqual(snp.counts, BaseCounts(A=95, C=1, G=3, T=1))
-        self.assertEqual(snp.genotype, Genotype(bases=['A', 'A']))
+        self.assertEqual(snp._position, Position(chromosome='chr1', coordinate=1000))
+        self.assertEqual(snp._counts, BaseCounts(A=95, C=1, G=3, T=1))
+        self.assertEqual(snp._genotype, Genotype(bases=['A', 'A']))

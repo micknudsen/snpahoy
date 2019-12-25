@@ -37,10 +37,10 @@ class TestGenotyper(unittest.TestCase):
 
     def test_genotyper(self):
         genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
-        self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), Genotype(['A', 'A']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(['C', 'G']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(['C', 'C']))
-        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(['G', 'T']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), Genotype(bases=['A', 'A']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(bases=['C', 'G']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(bases=['C', 'C']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(bases=['G', 'T']))
         self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), None)
 
 
@@ -58,9 +58,9 @@ class TestSNP(unittest.TestCase):
 class TestSample(unittest.TestCase):
 
     def setUp(self):
-        self.sample = Sample(snps=[SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(['A', 'A'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(['C', 'G'])),
-                                   SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(['C', 'C'])),
+        self.sample = Sample(snps=[SNP(position=Position(chromosome='chr1', coordinate=1000), counts=BaseCounts(A=48, C=0, G=2, T=0), genotype=Genotype(bases=['A', 'A'])),
+                                   SNP(position=Position(chromosome='chr1', coordinate=2000), counts=BaseCounts(A=0, C=30, G=25, T=0), genotype=Genotype(bases=['C', 'G'])),
+                                   SNP(position=Position(chromosome='chr1', coordinate=3000), counts=BaseCounts(A=8, C=92, G=0, T=0), genotype=Genotype(bases=['C', 'C'])),
                                    SNP(position=Position(chromosome='chr1', coordinate=4000), counts=BaseCounts(A=2, C=0, G=3, T=1), genotype=None)])
 
     def test_number_of_snps(self):

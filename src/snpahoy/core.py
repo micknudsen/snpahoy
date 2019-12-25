@@ -1,3 +1,4 @@
+from typing import List
 from typing import NamedTuple
 # from snpahoy.structures import Counts
 
@@ -5,6 +6,12 @@ from typing import NamedTuple
 class Position(NamedTuple):
     chromosome: str
     coordinate: int
+
+
+class Genotype:
+
+    def __init__(self, bases: List[str]) -> None:
+        self._genotype = ''.join(sorted(bases))
 
 
 # class SNP:

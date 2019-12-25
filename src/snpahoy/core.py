@@ -21,6 +21,13 @@ class Genotype:
             return NotImplemented
         return self._genotype == other._genotype
 
+    def category(self) -> GenotypeCategory:
+        if not self._genotype:
+            return GenotypeCategory.NOTGENOTYPED
+        if self._genotype[0] == self._genotype[1]:
+            return GenotypeCategory.HOMOZYGOTE
+        return GenotypeCategory.HETEROZYGOTE
+
 
 class Position(NamedTuple):
     chromosome: str
@@ -36,7 +43,7 @@ class BaseCounts(NamedTuple):
 
 class SNP:
 
-    def __init__(self, position: Position, counts: BaseCounts, genotype: Genotype):
+    def __init__(self, position: Position, counts: BaseCounts, genotype: Genotype) -> None:
         self._position = position
         self._counts = counts
         self._genotype = genotype

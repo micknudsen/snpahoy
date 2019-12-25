@@ -4,7 +4,7 @@ import unittest
 from snpahoy.core import BaseCounts
 # from snpahoy.core import Position
 from snpahoy.core import Genotype
-# from snpahoy.core import Genotyper
+from snpahoy.core import Genotyper
 
 
 class TestGenotpe(unittest.TestCase):
@@ -32,6 +32,19 @@ class TestBaseCounts(unittest.TestCase):
         self.assertEqual(counts.T, 25)
 
 
+class TestGenotyper(unittest.TestCase):
+
+    def test_genotyper(self):
+
+        genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
+
+        self.assertEqual(genotyper.genotype(BaseCounts(A=50, C=0, G=0, T=0)), Genotype(['A', 'A']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=50, G=50, T=0)), Genotype(['C', 'G']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=95, G=5, T=0)), Genotype(['C', 'C']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=0, C=0, G=90, T=10)), Genotype(['G', 'T']))
+        self.assertEqual(genotyper.genotype(BaseCounts(A=20, C=5, G=0, T=0)), None)
+
+
 # class TestSNP(unittest.TestCase):
 
 #     def setUp(self):
@@ -50,16 +63,3 @@ class TestBaseCounts(unittest.TestCase):
 #                   counts=Counts(a=0, c=0, g=0, t=0),
 #                   genotype=None)
 #         self.assertEqual(snp.minor_allele_frequency(), 0.0)
-
-
-# class TestGenotyper(unittest.TestCase):
-
-#     def test_genotyper(self):
-
-#         genotyper = Genotyper(minimum_coverage=30, homozygosity_threshold=0.95)
-
-#         self.assertEqual(genotyper.genotype(Counts(a=50, c=0, g=0, t=0)), ('A', 'A'))
-#         self.assertEqual(genotyper.genotype(Counts(a=0, c=50, g=50, t=0)), ('C', 'G'))
-#         self.assertEqual(genotyper.genotype(Counts(a=0, c=95, g=5, t=0)), ('C', 'C'))
-#         self.assertEqual(genotyper.genotype(Counts(a=0, c=0, g=90, t=10)), ('G', 'T'))
-#         self.assertEqual(genotyper.genotype(Counts(a=20, c=5, g=0, t=0)), None)

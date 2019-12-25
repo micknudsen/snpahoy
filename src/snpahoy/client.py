@@ -37,11 +37,17 @@ def main():
     tumor_snps = get_snps(coordinates=coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), chromosome=chromosome, position=position))
 
     genotyped_snp_pairs = []
-
     for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
         if normal_snp.genotype and tumor_snp.genotype:
             genotyped_snp_pairs.append([normal_snp, tumor_snp])
 
-    print(f'Minimum coverage ........ ...: {args.minimum_coverage}')
-    print(f'Homozygosity threshold ..... : {args.homozygosity_threshold}')
-    print(f'Number of genotyped SNPs ... : {len(genotyped_snp_pairs)}')
+    number_of_heterozygote_snps_in_normal = len([normal_snp for normal_snp, _ in genotyped_snp_pairs if not normal_snp.is_homozygote()])
+    number_of_heterozygote_snps_in_tumor = len([tumor_snp for _, tumor_snp in genotyped_snp_pairs if not tumor_snp.is_homozygote()])
+
+    number_of_genotyped_snps = len(genotyped_snp_pairs)
+
+    print(f'Minimum coverage ................... : {args.minimum_coverage}')
+    print(f'Homozygosity threshold ............. : {args.homozygosity_threshold}')
+    print(f'Number of genotyped SNPs ........... : {number_of_genotyped_snps}')
+    print(f'Normal fraction of heterozygotes ... : {number_of_heterozygote_snps_in_normal / number_of_genotyped_snps}')
+    print(f'Tumor fraction of heterozygotes .... : {number_of_heterozygote_snps_in_tumor / number_of_genotyped_snps}')

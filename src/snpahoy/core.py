@@ -13,6 +13,11 @@ class Genotype:
     def __init__(self, bases: List[str]) -> None:
         self._genotype = ''.join(sorted(bases))
 
+    def __eq__(self, other: object):
+        if not isinstance(other, Genotype):
+            return NotImplemented
+        return self._genotype == other._genotype
+
 
 # class SNP:
 

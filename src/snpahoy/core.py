@@ -14,6 +14,10 @@ class SNP:
     def genotype(self) -> str:
         return self._genotype
 
+    @property
+    def depth(self) -> int:
+        return sum(self._counts.values())
+
     def is_homozygote(self) -> bool:
         if not self._genotype:
             return False

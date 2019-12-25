@@ -1,11 +1,11 @@
 import argparse
 
 from typing import Dict
+from statistics import mean
 
 from pysam import AlignmentFile
 
 from snpahoy.core import Genotyper
-
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
 
@@ -46,8 +46,15 @@ def main():
 
     number_of_genotyped_snps = len(genotyped_snp_pairs)
 
-    print(f'Minimum coverage ................... : {args.minimum_coverage}')
-    print(f'Homozygosity threshold ............. : {args.homozygosity_threshold}')
-    print(f'Number of genotyped SNPs ........... : {number_of_genotyped_snps}')
-    print(f'Normal fraction of heterozygotes ... : {number_of_heterozygote_snps_in_normal / number_of_genotyped_snps}')
-    print(f'Tumor fraction of heterozygotes .... : {number_of_heterozygote_snps_in_tumor / number_of_genotyped_snps}')
+
+    mean_normal_minor_allele_frequency = mean([normal_snp.minor_allele_frequency() for normal_snp, _ in genotyped_snp_pairs if normal_snp.is_homozygote()])
+    mean_tumor_minor_allele_frequency = mean([tumor_snp.minor_allele_frequency() for normal_snp, tumor_snp in genotyped_snp_pairs if normal_snp.is_homozygote()])
+
+
+    print(f'Minimum coverage ..................... : {args.minimum_coverage}')
+    print(f'Homozygosity threshold ............... : {args.homozygosity_threshold}')
+    print(f'Number of genotyped SNPs ............. : {number_of_genotyped_snps}')
+    print(f'Normal fraction of heterozygotes ..... : {number_of_heterozygote_snps_in_normal / number_of_genotyped_snps}')
+    print(f'Tumor fraction of heterozygotes ...... : {number_of_heterozygote_snps_in_tumor / number_of_genotyped_snps}')
+    print(f'Normal mean minor allele frequency ... : {mean_normal_minor_allele_frequency}')
+    print(f'Tumor mean minor allele frequency .... : {mean_tumor_minor_allele_frequency}')

@@ -51,6 +51,9 @@ class Sample:
     def number_of_heterozygous_snps(self) -> int:
         return sum(1 for snp in self._snps if snp.is_heterozygous())
 
+    def minor_allele_frequencies_at_homozygous_snps(self) -> List[float]:
+        return [snp.minor_allele_frequency() for snp in self._snps if snp.is_homozygous()]
+
 
 class Genotyper:
 

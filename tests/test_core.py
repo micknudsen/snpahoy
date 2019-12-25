@@ -29,6 +29,9 @@ class TestSNP(unittest.TestCase):
     def test_get_genotype(self):
         self.assertEqual(self.snp.genotype, 'AA')
 
+    def test_get_depth(self):
+        self.assertEqual(self.snp.depth, 100)
+
     def test_is_homozygote(self):
         self.assertTrue(SNP(chromosome='chr1', position=1000, genotype='AA', counts={'A': 95, 'C': 1, 'G': 3, 'T': 1}).is_homozygote())
         self.assertFalse(SNP(chromosome='chr2', position=5000, genotype='GT', counts={'A': 0, 'C': 0, 'G': 35, 'T': 25}).is_homozygote())

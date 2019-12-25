@@ -25,7 +25,7 @@ def main():
     parser.add_argument('--bed_file', type=str, required=True)
     parser.add_argument('--tumor_bam_file', type=str, required=True)
     parser.add_argument('--normal_bam_file', type=str, required=True)
-    parser.add_argument('--output_json_file', type=str, required=False)
+    parser.add_argument('--output_json_file', type=str, required=True)
     parser.add_argument('--minimum_coverage', type=int, default=30)
     parser.add_argument('--homozygosity_threshold', type=float, default=0.95)
 
@@ -69,6 +69,5 @@ def main():
     results['settings'] = {'minimum-coverage': args.minimum_coverage,
                            'homozygosity-threshold': args.homozygosity_threshold}
 
-    if args.output_json_file:
-        with open(args.output_json_file, 'w') as json_file_handle:
-            json.dump(results, json_file_handle, indent=4)
+    with open(args.output_json_file, 'w') as json_file_handle:
+        json.dump(results, json_file_handle, indent=4)

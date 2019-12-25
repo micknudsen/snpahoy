@@ -36,25 +36,24 @@ def main():
     normal_snps = get_snps(coordinates=coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.normal_bam_file), chromosome=chromosome, position=position))
     tumor_snps = get_snps(coordinates=coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), chromosome=chromosome, position=position))
 
+    # Only consider SNPs which are genotyped in both normal and tumor sample.
     genotyped_snp_pairs = []
     for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
         if normal_snp.genotype and tumor_snp.genotype:
-            genotyped_snp_pairs.append([normal_snp, tumor_snp])
+            genotyped_snp_pairs.append({'normal': normal_snp, 'tumor': tumor_snp})
 
-    number_of_heterozygote_snps_in_normal = len([normal_snp for normal_snp, _ in genotyped_snp_pairs if not normal_snp.is_homozygote()])
-    number_of_heterozygote_snps_in_tumor = len([tumor_snp for _, tumor_snp in genotyped_snp_pairs if not tumor_snp.is_homozygote()])
+    def count_heterozygotes(sample: str) -> int:
+        """Exactly as advertized. Counts the number of heterozygote sites."""
+        return len([pair for pair in genotyped_snp_pairs if not pair[sample].is_homozygote()])
 
-    number_of_genotyped_snps = len(genotyped_snp_pairs)
-
-
-    mean_normal_minor_allele_frequency = mean([normal_snp.minor_allele_frequency() for normal_snp, _ in genotyped_snp_pairs if normal_snp.is_homozygote()])
-    mean_tumor_minor_allele_frequency = mean([tumor_snp.minor_allele_frequency() for normal_snp, tumor_snp in genotyped_snp_pairs if normal_snp.is_homozygote()])
-
+    def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
+        """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
+        return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
 
     print(f'Minimum coverage ..................... : {args.minimum_coverage}')
     print(f'Homozygosity threshold ............... : {args.homozygosity_threshold}')
-    print(f'Number of genotyped SNPs ............. : {number_of_genotyped_snps}')
-    print(f'Normal fraction of heterozygotes ..... : {number_of_heterozygote_snps_in_normal / number_of_genotyped_snps}')
-    print(f'Tumor fraction of heterozygotes ...... : {number_of_heterozygote_snps_in_tumor / number_of_genotyped_snps}')
-    print(f'Normal mean minor allele frequency ... : {mean_normal_minor_allele_frequency}')
-    print(f'Tumor mean minor allele frequency .... : {mean_tumor_minor_allele_frequency}')
+    print(f'Number of genotyped SNPs ............. : {len(genotyped_snp_pairs)}')
+    print(f'Normal fraction of heterozygotes ..... : {count_heterozygotes(sample="normal") / len(genotyped_snp_pairs)}')
+    print(f'Tumor fraction of heterozygotes ...... : {count_heterozygotes(sample="tumor") / len(genotyped_snp_pairs)}')
+    print(f'Normal mean minor allele frequency ... : {mean_minor_allele_frequency_at_homozygote_sites("normal")}')
+    print(f'Tumor mean minor allele frequency .... : {mean_minor_allele_frequency_at_homozygote_sites("tumor")}')

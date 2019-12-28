@@ -55,3 +55,9 @@ See example output below. The homozygote sites used in mean MAF calculations are
     }
 }
 ```
+
+The simplest way to install `snpahoy` is by using conda:
+
+```
+$ conda install -c micknudsen snpahoy
+```

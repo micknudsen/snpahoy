@@ -49,7 +49,7 @@ def main():
 
     def count_heterozygotes(sample: str) -> int:
         """Exactly as advertized. Counts the number of heterozygote sites."""
-        return len([pair for pair in genotyped_snp_pairs if not pair[sample].is_homozygote()])
+        return len([pair for pair in genotyped_snp_pairs if pair[sample].is_heterozygote()])
 
     def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""

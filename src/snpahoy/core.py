@@ -23,6 +23,11 @@ class SNP:
             return False
         return len(set(list(self._genotype))) == 1
 
+    def is_heterozygote(self) -> bool:
+        if not self._genotype:
+            return False
+        return len(set(list(self._genotype))) == 2
+
     def minor_allele_frequency(self) -> float:
         if self.depth == 0:
             return 0.0

@@ -109,6 +109,11 @@ def germline(ctx, bam_file):
                     genotyper=ctx.obj['genotyper'],
                     get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
 
+    genotypes = {}
+    for snp in snps:
+        genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
+    results['output']['genotypes'] = genotypes
+
     results['output']['summary'] = {'snps-total': len(snps),
                                     'snps-genotyped': len([snp for snp in snps if snp.genotype])}
 

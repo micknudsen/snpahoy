@@ -20,10 +20,11 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 
 
 @click.group()
+@click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage in both tumor and normal')
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context
-def client(ctx, minimum_coverage, homozygosity_threshold):
+def client(ctx, bed_file, minimum_coverage, homozygosity_threshold):
 
     ctx.obj['minimum_coverage'] = minimum_coverage
     ctx.obj['homozygosity_threshold'] = homozygosity_threshold
@@ -31,25 +32,32 @@ def client(ctx, minimum_coverage, homozygosity_threshold):
     genotyper = Genotyper(minimum_coverage=ctx.obj['minimum_coverage'],
                           homozygosity_threshold=ctx.obj['homozygosity_threshold'])
 
+    with open(bed_file, 'rt') as f:
+        snp_coordinates = parse_bed_file(f.read().splitlines())
+
+    ctx.obj['snp_coordinates'] = snp_coordinates
     ctx.obj['genotyper'] = genotyper
+
+    results = {}
+
+    results['input'] = defaultdict(dict)
+    results['output'] = defaultdict(dict)
+
+    ctx.obj['results'] = results
 
 
 @client.command()
-@click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file. Must be indexed.')
 @click.option('--normal_bam_file', type=click.Path(), required=True, help='Normal BAM file. Must be indexed.')
 @click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
-def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
+def somatic(ctx, tumor_bam_file, normal_bam_file, output_json_file):
 
-    with open(bed_file, 'rt') as f:
-        snp_coordinates = parse_bed_file(f.read().splitlines())
-
-    normal_snps = get_snps(coordinates=snp_coordinates,
+    normal_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                            genotyper=ctx.obj['genotyper'],
                            get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
 
-    tumor_snps = get_snps(coordinates=snp_coordinates,
+    tumor_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                           genotyper=ctx.obj['genotyper'],
                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
 
@@ -67,19 +75,17 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
         return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
 
-    results = {}
+    results = ctx.obj['results']
 
-    results['input'] = defaultdict(dict)
-    results['output'] = defaultdict(dict)
+    #  'bed-file': os.path.basename(bed_file),
 
-    results['input']['files'] = {'bed-file': os.path.basename(bed_file),
-                                 'normal-bam_file': os.path.basename(normal_bam_file),
+    results['input']['files'] = {'normal-bam_file': os.path.basename(normal_bam_file),
                                  'tumor-bam-file': os.path.basename(tumor_bam_file)}
 
     results['input']['settings'] = {'minimum-coverage': ctx.obj['minimum_coverage'],
                                     'homozygosity-threshold': ctx.obj['homozygosity_threshold']}
 
-    results['output']['summary'] = {'snps-total': len(snp_coordinates),
+    results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}
 
     if genotyped_snp_pairs:
@@ -93,18 +99,14 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
 
 
 @client.command()
-@click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--bam_file', type=click.Path(), required=True, help='BAM file. Must be indexed.')
 @click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
-def germline(ctx, bed_file, bam_file, output_json_file):
+def germline(ctx, bam_file, output_json_file):
 
-    with open(bed_file, 'rt') as f:
-        snp_coordinates = parse_bed_file(f.read().splitlines())
+    results = ctx.obj['results']
 
-    results = {}
-
-    snps = get_snps(coordinates=snp_coordinates,
+    snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                     genotyper=ctx.obj['genotyper'],
                     get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
 

@@ -24,8 +24,14 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context
 def client(ctx, minimum_coverage, homozygosity_threshold):
+
     ctx.obj['minimum_coverage'] = minimum_coverage
     ctx.obj['homozygosity_threshold'] = homozygosity_threshold
+
+    genotyper = Genotyper(minimum_coverage=ctx.obj['minimum_coverage'],
+                          homozygosity_threshold=ctx.obj['homozygosity_threshold'])
+
+    ctx.obj['genotyper'] = genotyper
 
 
 @client.command()
@@ -39,11 +45,8 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
     with open(bed_file, 'rt') as f:
         snp_coordinates = parse_bed_file(f.read().splitlines())
 
-    genotyper = Genotyper(minimum_coverage=ctx.obj['minimum_coverage'],
-                          homozygosity_threshold=ctx.obj['homozygosity_threshold'])
-
-    normal_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
-    tumor_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
+    normal_snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
+    tumor_snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
 
     # Only consider SNPs which are genotyped in both normal and tumor sample.
     genotyped_snp_pairs = []
@@ -94,12 +97,9 @@ def germline(ctx, bed_file, bam_file, output_json_file):
     with open(bed_file, 'rt') as f:
         snp_coordinates = parse_bed_file(f.read().splitlines())
 
-    genotyper = Genotyper(minimum_coverage=ctx.obj['minimum_coverage'],
-                          homozygosity_threshold=ctx.obj['homozygosity_threshold'])
-
     results = {}
 
-    snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
+    snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
 
     genotyped_snps = [snp for snp in snps if snp.genotype]
 

@@ -91,7 +91,21 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
 @click.pass_context
 def germline(ctx, bed_file, bam_file, output_json_file):
 
+    with open(bed_file, 'rt') as f:
+        snp_coordinates = parse_bed_file(f.read().splitlines())
+
+    genotyper = Genotyper(minimum_coverage=ctx.obj['minimum_coverage'],
+                          homozygosity_threshold=ctx.obj['homozygosity_threshold'])
+
     results = {}
+
+    snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
+
+    genotyped_snps = [snp for snp in snps if snp.genotype]
+
+    results['output'] = defaultdict(list)
+    results['output']['summary'] = {'snps-total': len(snps),
+                                    'snps-genotyped': len(genotyped_snps)}
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

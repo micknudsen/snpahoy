@@ -1,4 +1,5 @@
 import argparse
+import click
 import json
 import os
 
@@ -19,62 +20,70 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
     return {'A': coverage[0][0], 'C': coverage[1][0], 'G': coverage[2][0], 'T': coverage[3][0]}
 
 
-def main():
+@click.group()
+def client():
+    click.echo('Hello, World!')
 
-    parser = argparse.ArgumentParser()
+@client.command()
+def somatic():
+    click.echo('Hello, Somatic!')
 
-    parser.add_argument('--bed_file', type=str, required=True, help="BED file with SNP postions")
-    parser.add_argument('--tumor_bam_file', type=str, required=True, help="Tumor BAM file. Must be indexed.")
-    parser.add_argument('--normal_bam_file', type=str, required=True, help="Normal BAM file. Must be indexed.")
-    parser.add_argument('--output_json_file', type=str, required=True, help="JSON output file")
-    parser.add_argument('--minimum_coverage', type=int, default=30, help="Only consider SNP positions with a lest this coverage in both tumor and normal (default: %(default)s).")
-    parser.add_argument('--homozygosity_threshold', type=float, default=0.95, help="Consider a SNP position homozygote if frequency of most common allele is this or higher (default: %(default)s).")
+# def main():
 
-    args = parser.parse_args()
+#     parser = argparse.ArgumentParser()
 
-    with open(args.bed_file, 'rt') as f:
-        snp_coordinates = parse_bed_file(f.read().splitlines())
+#     parser.add_argument('--bed_file', type=str, required=True, help="BED file with SNP postions")
+#     parser.add_argument('--tumor_bam_file', type=str, required=True, help="Tumor BAM file. Must be indexed.")
+#     parser.add_argument('--normal_bam_file', type=str, required=True, help="Normal BAM file. Must be indexed.")
+#     parser.add_argument('--output_json_file', type=str, required=True, help="JSON output file")
+#     parser.add_argument('--minimum_coverage', type=int, default=30, help="Only consider SNP positions with a lest this coverage in both tumor and normal (default: %(default)s).")
+#     parser.add_argument('--homozygosity_threshold', type=float, default=0.95, help="Consider a SNP position homozygote if frequency of most common allele is this or higher (default: %(default)s).")
 
-    genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
-                          homozygosity_threshold=args.homozygosity_threshold)
+#     args = parser.parse_args()
 
-    normal_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.normal_bam_file), chromosome=chromosome, position=position))
-    tumor_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), chromosome=chromosome, position=position))
+#     with open(args.bed_file, 'rt') as f:
+#         snp_coordinates = parse_bed_file(f.read().splitlines())
 
-    # Only consider SNPs which are genotyped in both normal and tumor sample.
-    genotyped_snp_pairs = []
-    for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
-        if normal_snp.genotype and tumor_snp.genotype:
-            genotyped_snp_pairs.append({'normal': normal_snp, 'tumor': tumor_snp})
+#     genotyper = Genotyper(minimum_coverage=args.minimum_coverage,
+#                           homozygosity_threshold=args.homozygosity_threshold)
 
-    def count_heterozygotes(sample: str) -> int:
-        """Exactly as advertized. Counts the number of heterozygote sites."""
-        return len([pair for pair in genotyped_snp_pairs if pair[sample].is_heterozygote()])
+#     normal_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.normal_bam_file), chromosome=chromosome, position=position))
+#     tumor_snps = get_snps(coordinates=snp_coordinates, genotyper=genotyper, get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(args.tumor_bam_file), chromosome=chromosome, position=position))
 
-    def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
-        """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
-        return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
+#     # Only consider SNPs which are genotyped in both normal and tumor sample.
+#     genotyped_snp_pairs = []
+#     for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
+#         if normal_snp.genotype and tumor_snp.genotype:
+#             genotyped_snp_pairs.append({'normal': normal_snp, 'tumor': tumor_snp})
 
-    results = {}
+#     def count_heterozygotes(sample: str) -> int:
+#         """Exactly as advertized. Counts the number of heterozygote sites."""
+#         return len([pair for pair in genotyped_snp_pairs if pair[sample].is_heterozygote()])
 
-    results['input'] = defaultdict(dict)
-    results['output'] = defaultdict(dict)
+#     def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
+#         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
+#         return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
 
-    results['input']['files'] = {'bed-file': os.path.basename(args.bed_file),
-                                 'normal-bam_file': os.path.basename(args.normal_bam_file),
-                                 'tumor-bam-file': os.path.basename(args.tumor_bam_file)}
+#     results = {}
 
-    results['input']['settings'] = {'minimum-coverage': args.minimum_coverage,
-                                    'homozygosity-threshold': args.homozygosity_threshold}
+#     results['input'] = defaultdict(dict)
+#     results['output'] = defaultdict(dict)
 
-    results['output']['summary'] = {'snps-total': len(snp_coordinates),
-                                    'snps-genotyped': len(genotyped_snp_pairs)}
+#     results['input']['files'] = {'bed-file': os.path.basename(args.bed_file),
+#                                  'normal-bam_file': os.path.basename(args.normal_bam_file),
+#                                  'tumor-bam-file': os.path.basename(args.tumor_bam_file)}
 
-    if genotyped_snp_pairs:
-        results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs)))
-        results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs)))
-        results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal'))
-        results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))
+#     results['input']['settings'] = {'minimum-coverage': args.minimum_coverage,
+#                                     'homozygosity-threshold': args.homozygosity_threshold}
 
-    with open(args.output_json_file, 'w') as json_file_handle:
-        json.dump(results, json_file_handle, indent=4)
+#     results['output']['summary'] = {'snps-total': len(snp_coordinates),
+#                                     'snps-genotyped': len(genotyped_snp_pairs)}
+
+#     if genotyped_snp_pairs:
+#         results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs)))
+#         results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs)))
+#         results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal'))
+#         results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))
+
+#     with open(args.output_json_file, 'w') as json_file_handle:
+#         json.dump(results, json_file_handle, indent=4)

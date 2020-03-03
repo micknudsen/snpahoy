@@ -2,13 +2,15 @@
 
 # SNP Ahoy!
 
-Just a little tool for checking ID SNPs. It works in both germline and somatic modes as described in the sections below. By default, only sites with at least `30X` coverage are considered, and sites with major allele frequency greater than or equal to `95%` are considered homozygous.
+Just a little tool for checking ID SNPs. It works in both germline and somatic modes as described in the sections below. By default, only sites with at least `30X` coverage are considered, and sites with major allele frequency greater than or equal to `95%` are considered homyzygote.
 
 ```
 $ snpahoy --help
 Usage: snpahoy [OPTIONS] COMMAND [ARGS]...
 
 Options:
+  --bed_file PATH                 BED file with SNP postions  [required]
+  --output_json_file PATH         JSON output file  [required]
   --minimum_coverage INTEGER      Only consider SNP positions with a lest this
                                   coverage in both tumor and normal  [default:
                                   30]
@@ -22,17 +24,27 @@ Commands:
   somatic
 ```
 
-## Somatic Mode
+## Germline Mode
 
-See example output below. The homozygote sites used in mean MAF calculations are the homozygote sites in the normal sample. Suggested cut-offs for the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.
+To run in germline mode, simply provide a BAM file using the `--bam_file` option.
+
+```
+$ snpahoy --bed_file snps.bed --output_json_file snpahoy.json germline --help
+Usage: snpahoy germline [OPTIONS]
+
+Options:
+  --bam_file PATH  BAM file. Must be indexed.  [required]
+  --help           Show this message and exit.
+```
+
+The output JSON file contains input information, genotypes at all SNP positions, and a summary. In case a SNP is not genotyped (as for the `chrY` ones in the example below), the empty string is reported as genotype.
 
 ```
 {
     "input": {
         "files": {
-            "bed-file": "my_id_snps.bed",
-            "normal-bam_file": "my_normal.bam",
-            "tumor-bam-file": "my_tumor.bam"
+            "bed-file": "snps.bed",
+            "bam-file": "germline.bam"
         },
         "settings": {
             "minimum-coverage": 30,
@@ -40,21 +52,68 @@ See example output below. The homozygote sites used in mean MAF calculations are
         }
     },
     "output": {
+        "genotypes": {
+            "chr1:4789323": "CC",
+            "chr1:4895801": "CC",
+            "chr1:7374482": "TT",
+            ...
+            "chrY:20768865": "",
+            "chrY:23164803": ""
+        },
         "summary": {
-            "snps-total": 1042,
-            "snps-genotyped": 1005,
-            "heterozygotes-fraction-normal": 0.4239,
-            "heterozygotes-fraction-tumor": 0.4201,
-            "mean-maf-homozygote-sites-normal": 0.0041,
-            "mean-maf-homozygote-sites-tumor": 0.0035
+            "snps-total": 1041,
+            "snps-genotyped": 1028,
+            "heterozygotes-fraction": 0.4572,
+            "mean-maf-homozygote-sites": 0.0004
         }
     }
 }
 ```
 
-## Germline Mode
+## Somatic Mode
 
-Here be dragons!
+To run in somatic mode, provide tumor and normal BAM files using the `--tumor_bam_file` and `--normal_bam_file` options.
+
+```
+% snpahoy --bed_file snps.bed --output_json_file snpahoy.json somatic --help
+Usage: snpahoy somatic [OPTIONS]
+
+Options:
+  --normal_bam_file PATH  Normal BAM file. Must be indexed.  [required]
+  --tumor_bam_file PATH   Tumor BAM file. Must be indexed.  [required]
+  --help                  Show this message and exit.
+```
+
+Output is similar to that in germline mode. Only sites which are genotyping in both tumor and germline are used, and the homozygote sites used in mean MAF calculations are the homozygote sites in the normal sample.
+
+```
+{
+    "input": {
+        "files": {
+            "bed-file": "snps.bed",
+            "normal-bam_file": "germline.bam",
+            "tumor-bam-file": "tumor.bam"
+        },
+        "settings": {
+            "minimum-coverage": 30,
+            "homozygosity-threshold": 0.95
+        },
+        "output": {
+            "normal-genotypes": { ... },
+             "tumor-genotypes": { ... }
+        },
+        "summary": {
+            "snps-total": 1041,
+            "snps-genotyped": 1028,
+            "heterozygotes-fraction-normal": 0.4572,
+            "heterozygotes-fraction-tumor": 0.4582,
+            "mean-maf-homozygote-sites-normal": 0.0004,
+            "mean-maf-homozygote-sites-tumor": 0.0004
+        }
+    }
+```
+
+This tool is developed with with the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel in mind. Suggesed cut-offs for identifying sample swap or contamination are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.
 
 ## Installation
 

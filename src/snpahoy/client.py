@@ -45,8 +45,13 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
     with open(bed_file, 'rt') as f:
         snp_coordinates = parse_bed_file(f.read().splitlines())
 
-    normal_snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
-    tumor_snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
+    normal_snps = get_snps(coordinates=snp_coordinates,
+                           genotyper=ctx.obj['genotyper'],
+                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
+
+    tumor_snps = get_snps(coordinates=snp_coordinates,
+                          genotyper=ctx.obj['genotyper'],
+                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
 
     # Only consider SNPs which are genotyped in both normal and tumor sample.
     genotyped_snp_pairs = []
@@ -99,7 +104,9 @@ def germline(ctx, bed_file, bam_file, output_json_file):
 
     results = {}
 
-    snps = get_snps(coordinates=snp_coordinates, genotyper=ctx.obj['genotyper'], get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
+    snps = get_snps(coordinates=snp_coordinates,
+                    genotyper=ctx.obj['genotyper'],
+                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
 
     genotyped_snps = [snp for snp in snps if snp.genotype]
 

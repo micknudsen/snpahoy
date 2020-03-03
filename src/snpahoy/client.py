@@ -24,7 +24,7 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 @click.option('--minimum_coverage', default=30, show_default=True)
 @click.option('--homozygosity_threshold', default=0.95, show_default=True)
 def client(minimum_coverage, homozygosity_threshold):
-    click.echo('Hello, World!')
+    pass
 
 @client.command()
 @click.option('--bed_file')

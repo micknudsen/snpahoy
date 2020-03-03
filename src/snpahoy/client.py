@@ -1,4 +1,3 @@
-import argparse
 import click
 import json
 import os
@@ -27,6 +26,7 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 def client(ctx, minimum_coverage, homozygosity_threshold):
     ctx.obj['minimum_coverage'] = minimum_coverage
     ctx.obj['homozygosity_threshold'] = homozygosity_threshold
+
 
 @client.command()
 @click.option('--bed_file', type=click.Path(), required=True)
@@ -82,6 +82,7 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)
+
 
 def run():
     client(obj={})

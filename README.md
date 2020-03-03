@@ -12,8 +12,7 @@ Options:
   --bed_file PATH                 BED file with SNP postions  [required]
   --output_json_file PATH         JSON output file  [required]
   --minimum_coverage INTEGER      Only consider SNP positions with a lest this
-                                  coverage in both tumor and normal  [default:
-                                  30]
+                                  coverage  [default: 30]
   --homozygosity_threshold FLOAT  Consider a SNP position homozygote if
                                   frequency of most common allele is this or
                                   higher  [default: 0.95]
@@ -75,13 +74,13 @@ The output JSON file contains input information, genotypes at all SNP positions,
 To run in somatic mode, provide tumor and normal BAM files using the `--tumor_bam_file` and `--normal_bam_file` options.
 
 ```
-% snpahoy --bed_file snps.bed --output_json_file snpahoy.json somatic --help
+$ snpahoy --bed_file snps.bed --output_json_file snpahoy.json somatic --help
 Usage: snpahoy somatic [OPTIONS]
 
 Options:
-  --normal_bam_file PATH  Normal BAM file. Must be indexed.  [required]
-  --tumor_bam_file PATH   Tumor BAM file. Must be indexed.  [required]
-  --help                  Show this message and exit.
+  --tumor_bam_file PATH     Tumor BAM file. Must be indexed.  [required]
+  --germline_bam_file PATH  Germline BAM file. Must be indexed.  [required]
+  --help                    Show this message and exit.
 ```
 
 Output is similar to that in germline mode. Only sites which are genotyping in both tumor and germline are used, and the homozygote sites used in mean MAF calculations are the homozygote sites in the normal sample.
@@ -91,8 +90,8 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
     "input": {
         "files": {
             "bed-file": "snps.bed",
-            "normal-bam_file": "germline.bam",
-            "tumor-bam-file": "tumor.bam"
+            "tumor-bam-file": "tumor.bam",
+            "germline-bam_file": "germline.bam"
         },
         "settings": {
             "minimum-coverage": 30,
@@ -105,10 +104,10 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
         "summary": {
             "snps-total": 1041,
             "snps-genotyped": 1028,
-            "heterozygotes-fraction-normal": 0.4572,
-            "heterozygotes-fraction-tumor": 0.4582,
-            "mean-maf-homozygote-sites-normal": 0.0004,
-            "mean-maf-homozygote-sites-tumor": 0.0004
+            "heterozygotes-fraction-tumor": 0.4533,
+            "heterozygotes-fraction-germline": 0.4533,
+            "mean-maf-homozygote-sites-tumor": 0.0006,
+            "mean-maf-homozygote-sites-germline": 0.0006
         }
     }
 ```

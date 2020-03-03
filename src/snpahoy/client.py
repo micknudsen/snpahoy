@@ -27,14 +27,14 @@ def count_heterozygotes(snps: List[SNP]) -> int:
 
 
 def mean_minor_allele_frequency(snps: List[SNP]) -> float:
-    """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
+    """Computes the mean minor allele frequency at sites which are homozygote in the germline sample."""
     return mean([snp.minor_allele_frequency() for snp in snps])
 
 
 @click.group()
 @click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
-@click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage in both tumor and normal')
+@click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage')
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context
 def client(ctx, bed_file, output_json_file, minimum_coverage, homozygosity_threshold):
@@ -65,55 +65,55 @@ def client(ctx, bed_file, output_json_file, minimum_coverage, homozygosity_thres
 
 
 @client.command()
-@click.option('--normal_bam_file', type=click.Path(), required=True, help='Normal BAM file. Must be indexed.')
 @click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file. Must be indexed.')
+@click.option('--germline_bam_file', type=click.Path(), required=True, help='Germline BAM file. Must be indexed.')
 @click.pass_context
-def somatic(ctx, tumor_bam_file, normal_bam_file):
+def somatic(ctx, tumor_bam_file, germline_bam_file):
 
     results = ctx.obj['results']
 
-    results['input']['files']['normal-bam_file'] = os.path.basename(normal_bam_file)
     results['input']['files']['tumor-bam-file'] = os.path.basename(tumor_bam_file)
+    results['input']['files']['germline-bam_file'] = os.path.basename(germline_bam_file)
 
-    normal_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
-                           genotyper=ctx.obj['genotyper'],
-                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(normal_bam_file), chromosome=chromosome, position=position))
+    germline_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
+                             genotyper=ctx.obj['genotyper'],
+                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file), chromosome=chromosome, position=position))
 
     tumor_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                           genotyper=ctx.obj['genotyper'],
                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
 
-    normal_genotypes = {}
-    for snp in normal_snps:
-        normal_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
-    results['output']['normal-genotypes'] = normal_genotypes
+    germline_genotypes = {}
+    for snp in germline_snps:
+        germline_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
+    results['output']['germline-genotypes'] = germline_genotypes
 
     tumor_genotypes = {}
     for snp in tumor_snps:
         tumor_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
     results['output']['tumor-genotypes'] = tumor_genotypes
 
-    # Only consider SNPs which are genotyped in both normal and tumor sample.
+    # Only consider SNPs which are genotyped in both germline and tumor sample.
     genotyped_snp_pairs = []
-    for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):
-        if normal_snp.genotype and tumor_snp.genotype:
-            genotyped_snp_pairs.append({'normal': normal_snp, 'tumor': tumor_snp})
+    for germline_snp, tumor_snp in zip(germline_snps, tumor_snps):
+        if germline_snp.genotype and tumor_snp.genotype:
+            genotyped_snp_pairs.append({'germline': germline_snp, 'tumor': tumor_snp})
 
-    number_of_heterozygotes_normal = count_heterozygotes(snps=[pair['normal'] for pair in genotyped_snp_pairs])
+    number_of_heterozygotes_germline = count_heterozygotes(snps=[pair['germline'] for pair in genotyped_snp_pairs])
     number_of_heterozygotes_tumor = count_heterozygotes(snps=[pair['tumor'] for pair in genotyped_snp_pairs])
 
-    # Homozygote positions are those at which the NORMAL sample is homzygote.
-    normal_snps_at_homozygote_positions = [pair['normal'] for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()]
-    tumor_snps_at_homozygote_positions = [pair['tumor'] for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()]
+    # Homozygote positions are those at which the germline sample is homzygote.
+    germline_snps_at_homozygote_positions = [pair['germline'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
+    tumor_snps_at_homozygote_positions = [pair['tumor'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
 
     results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}
 
     if genotyped_snp_pairs:
-        results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (number_of_heterozygotes_normal / len(genotyped_snp_pairs)))
         results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (number_of_heterozygotes_tumor / len(genotyped_snp_pairs)))
-        results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency(snps=normal_snps_at_homozygote_positions))
+        results['output']['summary']['heterozygotes-fraction-germline'] = float('%.4f' % (number_of_heterozygotes_germline / len(genotyped_snp_pairs)))
         results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions))
+        results['output']['summary']['mean-maf-homozygote-sites-germline'] = float('%.4f' % mean_minor_allele_frequency(snps=germline_snps_at_homozygote_positions))
 
     with open(ctx.obj['output_json_file'], 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

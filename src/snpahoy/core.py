@@ -4,14 +4,14 @@ from typing import Optional
 
 class SNP:
 
-    def __init__(self, chromosome: str, position: int, genotype: str, counts: Dict[str, int]) -> None:
+    def __init__(self, chromosome: str, position: int, genotype: Optional[str], counts: Dict[str, int]) -> None:
         self._chromosome = chromosome
         self._position = position
         self._genotype = genotype
         self._counts = counts
 
     @property
-    def genotype(self) -> str:
+    def genotype(self) -> Optional[str]:
         return self._genotype
 
     @property

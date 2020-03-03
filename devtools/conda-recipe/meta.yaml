@@ -16,6 +16,7 @@ requirements:
     - pip
     - python >=3.6
   run:
+    - click
     - pysam
     - python >=3.6
 

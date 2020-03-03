@@ -84,5 +84,11 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
         json.dump(results, json_file_handle, indent=4)
 
 
+@client.command()
+@click.pass_context
+def germline(ctx):
+    pass
+
+
 def run():
     client(obj={})

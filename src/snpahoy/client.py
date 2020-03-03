@@ -109,10 +109,8 @@ def germline(ctx, bam_file):
                     genotyper=ctx.obj['genotyper'],
                     get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
 
-    genotyped_snps = [snp for snp in snps if snp.genotype]
-
     results['output']['summary'] = {'snps-total': len(snps),
-                                    'snps-genotyped': len(genotyped_snps)}
+                                    'snps-genotyped': len([snp for snp in snps if snp.genotype])}
 
     with open(ctx.obj['output_json_file'], 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

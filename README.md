@@ -71,7 +71,7 @@ The output JSON file contains input information, genotypes at all SNP positions,
 
 ## Somatic Mode
 
-To run in somatic mode, provide tumor and normal BAM files using the `--tumor_bam_file` and `--normal_bam_file` options.
+To run in somatic mode, provide tumor and germline BAM files using the `--tumor_bam_file` and `--germline_bam_file` options.
 
 ```
 $ snpahoy --bed_file snps.bed --output_json_file snpahoy.json somatic --help
@@ -98,8 +98,8 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
             "homozygosity-threshold": 0.95
         },
         "output": {
-            "normal-genotypes": { ... },
-             "tumor-genotypes": { ... }
+            "tumor-genotypes": { ... },
+            "germline-genotypes": { ... }
         },
         "summary": {
             "snps-total": 1041,

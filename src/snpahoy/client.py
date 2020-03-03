@@ -83,15 +83,15 @@ def somatic(ctx, tumor_bam_file, germline_bam_file):
                           genotyper=ctx.obj['genotyper'],
                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
 
-    germline_genotypes = {}
-    for snp in germline_snps:
-        germline_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
-    results['output']['germline-genotypes'] = germline_genotypes
-
     tumor_genotypes = {}
     for snp in tumor_snps:
         tumor_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
     results['output']['tumor-genotypes'] = tumor_genotypes
+
+    germline_genotypes = {}
+    for snp in germline_snps:
+        germline_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
+    results['output']['germline-genotypes'] = germline_genotypes
 
     # Only consider SNPs which are genotyped in both germline and tumor sample.
     genotyped_snp_pairs = []

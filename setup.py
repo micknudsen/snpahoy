@@ -11,7 +11,7 @@ setup(
     test_suite='tests',
 
     entry_points={
-        'console_scripts': ['snpahoy = snpahoy.client:client']
+        'console_scripts': ['snpahoy = snpahoy.client:run']
     },
 
     python_requires='>=3.6',

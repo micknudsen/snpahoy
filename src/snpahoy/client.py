@@ -3,13 +3,14 @@ import json
 import os
 
 from collections import defaultdict
-# from statistics import mean
 from typing import Dict
+from typing import List
 
 
 from pysam import AlignmentFile
 
 from snpahoy.core import Genotyper
+from snpahoy.core import SNP
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
 
@@ -17,6 +18,11 @@ from snpahoy.parsers import parse_bed_file
 def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict[str, int]:
     coverage = alignment.count_coverage(contig=chromosome, start=position, stop=position + 1)
     return {'A': coverage[0][0], 'C': coverage[1][0], 'G': coverage[2][0], 'T': coverage[3][0]}
+
+
+def count_heterozygotes(snps: List[SNP]) -> int:
+    """Exactly as advertized. Counts the number of heterozygote sites."""
+    return len([snp for snp in snps if snp.is_heterozygote()])
 
 
 @click.group()
@@ -87,9 +93,8 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
         if normal_snp.genotype and tumor_snp.genotype:
             genotyped_snp_pairs.append({'normal': normal_snp, 'tumor': tumor_snp})
 
-    # def count_heterozygotes(sample: str) -> int:
-    #     """Exactly as advertized. Counts the number of heterozygote sites."""
-    #     return len([pair for pair in genotyped_snp_pairs if pair[sample].is_heterozygote()])
+    number_of_heterozygotes_normal = count_heterozygotes(snps=[pair['normal'] for pair in genotyped_snp_pairs])
+    number_of_heterozygotes_tumor = count_heterozygotes(snps=[pair['tumor'] for pair in genotyped_snp_pairs])
 
     # def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
     #     """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
@@ -98,9 +103,9 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
     results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}
 
-    # if genotyped_snp_pairs:
-    #     results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (count_heterozygotes(sample='normal') / len(genotyped_snp_pairs)))
-    #     results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (count_heterozygotes(sample='tumor') / len(genotyped_snp_pairs)))
+    if genotyped_snp_pairs:
+        results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (number_of_heterozygotes_normal / len(genotyped_snp_pairs)))
+        results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (number_of_heterozygotes_tumor / len(genotyped_snp_pairs)))
     #     results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal'))
     #     results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))
 

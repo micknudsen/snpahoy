@@ -20,8 +20,8 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 
 
 @click.group()
-@click.option('--minimum_coverage', default=30, show_default=True)
-@click.option('--homozygosity_threshold', default=0.95, show_default=True)
+@click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage in both tumor and normal')
+@click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context
 def client(ctx, minimum_coverage, homozygosity_threshold):
     ctx.obj['minimum_coverage'] = minimum_coverage
@@ -29,10 +29,10 @@ def client(ctx, minimum_coverage, homozygosity_threshold):
 
 
 @client.command()
-@click.option('--bed_file', type=click.Path(), required=True)
-@click.option('--tumor_bam_file', type=click.Path(), required=True)
-@click.option('--normal_bam_file', type=click.Path(), required=True)
-@click.option('--output_json_file', type=click.Path(), required=True)
+@click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
+@click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file. Must be indexed.')
+@click.option('--normal_bam_file', type=click.Path(), required=True, help='Normal BAM file. Must be indexed.')
+@click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
 def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
 

@@ -53,10 +53,15 @@ def client(ctx, bed_file, output_json_file, minimum_coverage, homozygosity_thres
 
 
 @client.command()
-@click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file. Must be indexed.')
 @click.option('--normal_bam_file', type=click.Path(), required=True, help='Normal BAM file. Must be indexed.')
+@click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file. Must be indexed.')
 @click.pass_context
 def somatic(ctx, tumor_bam_file, normal_bam_file):
+
+    results = ctx.obj['results']
+
+    results['input']['files']['normal-bam_file'] = os.path.basename(normal_bam_file)
+    results['input']['files']['tumor-bam-file'] = os.path.basename(tumor_bam_file)
 
     normal_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                            genotyper=ctx.obj['genotyper'],
@@ -65,6 +70,11 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
     tumor_snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                           genotyper=ctx.obj['genotyper'],
                           get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
+
+    normal_genotypes = {}
+    for snp in normal_snps:
+        normal_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
+    results['output']['normal-genotypes'] = normal_genotypes
 
     # Only consider SNPs which are genotyped in both normal and tumor sample.
     genotyped_snp_pairs = []
@@ -79,11 +89,6 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
     def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
         """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
         return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
-
-    results = ctx.obj['results']
-
-    results['input']['files']['normal-bam_file'] = os.path.basename(normal_bam_file)
-    results['input']['files']['tumor-bam-file'] = os.path.basename(tumor_bam_file)
 
     results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}

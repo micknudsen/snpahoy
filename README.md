@@ -83,7 +83,7 @@ Options:
   --help                    Show this message and exit.
 ```
 
-Output is similar to that in germline mode. Only sites which are genotyping in both tumor and germline are used, and the homozygote sites used in mean MAF calculations are the homozygote sites in the normal sample.
+Output is similar to that in germline mode. Only sites which are genotyping in both tumor and germline are used, and the homozygote sites used in mean MAF calculations are the homozygote sites in the germline sample.
 
 ```
 {

@@ -2,31 +2,27 @@
 
 # SNP Ahoy!
 
-Calculates various measures for identifying sample swaps and contamination in paired tumor-normal sequencing.
+Just a little tool for checking ID SNPs. It works in both germline and somatic modes as described in the sections below. By default, only sites with at least `30X` coverage are considered, and sites with major allele frequency greater than or equal to `95%` are considered homozygous.
 
 ```
-% snpahoy --help
-usage: snpahoy [-h] --bed_file BED_FILE --tumor_bam_file TUMOR_BAM_FILE
-               --normal_bam_file NORMAL_BAM_FILE --output_json_file
-               OUTPUT_JSON_FILE [--minimum_coverage MINIMUM_COVERAGE]
-               [--homozygosity_threshold HOMOZYGOSITY_THRESHOLD]
+$ snpahoy --help
+Usage: snpahoy [OPTIONS] COMMAND [ARGS]...
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --bed_file BED_FILE   BED file with SNP postions
-  --tumor_bam_file TUMOR_BAM_FILE
-                        Tumor BAM file. Must be indexed.
-  --normal_bam_file NORMAL_BAM_FILE
-                        Normal BAM file. Must be indexed.
-  --output_json_file OUTPUT_JSON_FILE
-                        JSON output file
-  --minimum_coverage MINIMUM_COVERAGE
-                        Only consider SNP positions with a lest this coverage
-                        in both tumor and normal (default: 30).
-  --homozygosity_threshold HOMOZYGOSITY_THRESHOLD
-                        Consider a SNP position homozygote if frequency of
-                        most common allele is this or higher (default: 0.95).
+Options:
+  --minimum_coverage INTEGER      Only consider SNP positions with a lest this
+                                  coverage in both tumor and normal  [default:
+                                  30]
+  --homozygosity_threshold FLOAT  Consider a SNP position homozygote if
+                                  frequency of most common allele is this or
+                                  higher  [default: 0.95]
+  --help                          Show this message and exit.
+
+Commands:
+  germline
+  somatic
 ```
+
+## Somatic Mode
 
 See example output below. The homozygote sites used in mean MAF calculations are the homozygote sites in the normal sample. Suggested cut-offs for the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.
 
@@ -56,7 +52,13 @@ See example output below. The homozygote sites used in mean MAF calculations are
 }
 ```
 
-The simplest way to install `snpahoy` is by using conda:
+## Germline Mode
+
+Here be dragons!
+
+## Installation
+
+The recommended way to install `snpahoy` is by using conda:
 
 ```
 $ conda install -c micknudsen snpahoy

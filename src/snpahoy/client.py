@@ -85,9 +85,16 @@ def somatic(ctx, bed_file, tumor_bam_file, normal_bam_file, output_json_file):
 
 
 @client.command()
+@click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
+@click.option('--bam_file', type=click.Path(), required=True, help='BAM file. Must be indexed.')
+@click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
-def germline(ctx):
-    pass
+def germline(ctx, bed_file, bam_file, output_json_file):
+
+    results = {}
+
+    with open(output_json_file, 'w') as json_file_handle:
+        json.dump(results, json_file_handle, indent=4)
 
 
 def run():

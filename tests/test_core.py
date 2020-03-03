@@ -48,3 +48,6 @@ class TestSNP(unittest.TestCase):
     def test_minor_allele_frequency_at_uncovered_position(self):
         snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G': 0, 'T': 0})
         self.assertEqual(snp.minor_allele_frequency(), 0.0)
+
+    def test_snp_string_representation(self):
+        self.assertEqual(self.snp.__str__(), 'chr1:1000')

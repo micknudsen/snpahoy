@@ -27,10 +27,10 @@ def client(minimum_coverage, homozygosity_threshold):
     pass
 
 @client.command()
-@click.option('--bed_file')
-@click.option('--tumor_bam_file')
-@click.option('--normal_bam_file')
-@click.option('--output_json_file')
+@click.option('--bed_file', type=click.Path(), required=True)
+@click.option('--tumor_bam_file', type=click.Path(), required=True)
+@click.option('--normal_bam_file', type=click.Path(), required=True)
+@click.option('--output_json_file', type=click.Path(), required=True)
 def somatic(bed_file, tumor_bam_file, normal_bam_file, output_json_file):
     click.echo('Hello, Somatic!')
 

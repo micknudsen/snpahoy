@@ -10,6 +10,9 @@ class SNP:
         self._genotype = genotype
         self._counts = counts
 
+    def __str__(self) -> str:
+        return f'{self._chromosome}:{self._position}'
+
     @property
     def genotype(self) -> Optional[str]:
         return self._genotype

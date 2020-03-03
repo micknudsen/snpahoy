@@ -35,7 +35,6 @@ class TestParsers(unittest.TestCase):
         self.assertEqual(snps[0]._genotype, 'AA')
         self.assertEqual(snps[0]._counts, {'A': 50, 'C': 0, 'G': 0, 'T': 0})
 
-
         self.assertEqual(snps[1]._chromosome, 'chr2')
         self.assertEqual(snps[1]._position, 5000)
         self.assertEqual(snps[1]._genotype, 'CG')

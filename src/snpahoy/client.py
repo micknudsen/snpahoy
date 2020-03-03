@@ -43,6 +43,10 @@ def client(ctx, bed_file, minimum_coverage, homozygosity_threshold):
     results['input'] = defaultdict(dict)
     results['output'] = defaultdict(dict)
 
+    results['input']['files'] = {'bed-file': os.path.basename(bed_file)}
+    results['input']['settings'] = {'minimum-coverage': ctx.obj['minimum_coverage'],
+                                    'homozygosity-threshold': ctx.obj['homozygosity_threshold']}
+
     ctx.obj['results'] = results
 
 
@@ -77,13 +81,8 @@ def somatic(ctx, tumor_bam_file, normal_bam_file, output_json_file):
 
     results = ctx.obj['results']
 
-    #  'bed-file': os.path.basename(bed_file),
-
     results['input']['files'] = {'normal-bam_file': os.path.basename(normal_bam_file),
                                  'tumor-bam-file': os.path.basename(tumor_bam_file)}
-
-    results['input']['settings'] = {'minimum-coverage': ctx.obj['minimum_coverage'],
-                                    'homozygosity-threshold': ctx.obj['homozygosity_threshold']}
 
     results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}

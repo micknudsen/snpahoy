@@ -147,6 +147,13 @@ def germline(ctx, bam_file):
     results['output']['summary'] = {'snps-total': len(snps),
                                     'snps-genotyped': len(genotyped_snps)}
 
+    number_of_heterozygotes = count_heterozygotes(snps=genotyped_snps)
+    homozygote_snps = [snp for snp in snps if snp.is_homozygote()]
+
+    if genotyped_snps:
+        results['output']['summary']['heterozygotes-fraction'] = float('%.4f' % (number_of_heterozygotes / len(genotyped_snps)))
+        results['output']['summary']['mean-maf-homozygote-sites'] = float('%.4f' % mean_minor_allele_frequency(snps=homozygote_snps))
+
     with open(ctx.obj['output_json_file'], 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)
 

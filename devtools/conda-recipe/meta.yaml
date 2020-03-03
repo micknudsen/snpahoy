@@ -23,4 +23,4 @@ requirements:
 about:
   home: https://github.com/micknudsen/snpahoy
   license: MIT
-  summary: ID SNP analysis for paired tumor-normal sequencing
+  summary: ID SNP analysis for NGS sequencing

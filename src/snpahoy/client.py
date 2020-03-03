@@ -76,6 +76,11 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
         normal_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
     results['output']['normal-genotypes'] = normal_genotypes
 
+    tumor_genotypes = {}
+    for snp in tumor_snps:
+        tumor_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
+    results['output']['tumor-genotypes'] = tumor_genotypes
+
     # Only consider SNPs which are genotyped in both normal and tumor sample.
     genotyped_snp_pairs = []
     for normal_snp, tumor_snp in zip(normal_snps, tumor_snps):

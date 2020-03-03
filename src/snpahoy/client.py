@@ -3,6 +3,7 @@ import json
 import os
 
 from collections import defaultdict
+from statistics import mean
 from typing import Dict
 from typing import List
 
@@ -23,6 +24,11 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 def count_heterozygotes(snps: List[SNP]) -> int:
     """Exactly as advertized. Counts the number of heterozygote sites."""
     return len([snp for snp in snps if snp.is_heterozygote()])
+
+
+def mean_minor_allele_frequency(snps: List[SNP]) -> float:
+    """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
+    return mean([snp.minor_allele_frequency() for snp in snps])
 
 
 @click.group()
@@ -96,9 +102,9 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
     number_of_heterozygotes_normal = count_heterozygotes(snps=[pair['normal'] for pair in genotyped_snp_pairs])
     number_of_heterozygotes_tumor = count_heterozygotes(snps=[pair['tumor'] for pair in genotyped_snp_pairs])
 
-    # def mean_minor_allele_frequency_at_homozygote_sites(sample: str) -> float:
-    #     """Computes the mean minor allele frequency at sites which are homozygote in the NORMAL sample."""
-    #     return mean([pair[sample].minor_allele_frequency() for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()])
+    # Homozygote positions are those at which the NORMAL sample is homzygote.
+    normal_snps_at_homozygote_positions = [pair['normal'] for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()]
+    tumor_snps_at_homozygote_positions = [pair['tumor'] for pair in genotyped_snp_pairs if pair['normal'].is_homozygote()]
 
     results['output']['summary'] = {'snps-total': len(ctx.obj['snp_coordinates']),
                                     'snps-genotyped': len(genotyped_snp_pairs)}
@@ -106,8 +112,8 @@ def somatic(ctx, tumor_bam_file, normal_bam_file):
     if genotyped_snp_pairs:
         results['output']['summary']['heterozygotes-fraction-normal'] = float('%.4f' % (number_of_heterozygotes_normal / len(genotyped_snp_pairs)))
         results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (number_of_heterozygotes_tumor / len(genotyped_snp_pairs)))
-    #     results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('normal'))
-    #     results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency_at_homozygote_sites('tumor'))
+        results['output']['summary']['mean-maf-homozygote-sites-normal'] = float('%.4f' % mean_minor_allele_frequency(snps=normal_snps_at_homozygote_positions))
+        results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions))
 
     with open(ctx.obj['output_json_file'], 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

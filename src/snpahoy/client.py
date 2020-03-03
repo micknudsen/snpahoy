@@ -21,11 +21,17 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
 
 
 @click.group()
-def client():
+@click.option('--minimum_coverage')
+@click.option('--homozygosity_threshold')
+def client(minimum_coverage, homozygosity_threshold):
     click.echo('Hello, World!')
 
 @client.command()
-def somatic():
+@click.option('--bed_file')
+@click.option('--tumor_bam_file')
+@click.option('--normal_bam_file')
+@click.option('--output_json_file')
+def somatic(bed_file, tumor_bam_file, normal_bam_file, output_json_file):
     click.echo('Hello, Somatic!')
 
 # def main():

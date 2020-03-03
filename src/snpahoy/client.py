@@ -105,6 +105,8 @@ def germline(ctx, bam_file):
 
     results = ctx.obj['results']
 
+    results['input']['files']['bam-file'] = os.path.basename(bam_file)
+
     snps = get_snps(coordinates=ctx.obj['snp_coordinates'],
                     genotyper=ctx.obj['genotyper'],
                     get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))

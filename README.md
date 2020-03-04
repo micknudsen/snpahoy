@@ -9,8 +9,6 @@ $ snpahoy --help
 Usage: snpahoy [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --bed_file PATH                 BED file with SNP postions  [required]
-  --output_json_file PATH         JSON output file  [required]
   --minimum_coverage INTEGER      Only consider SNP positions with a lest this
                                   coverage  [default: 30]
   --homozygosity_threshold FLOAT  Consider a SNP position homozygote if
@@ -28,12 +26,14 @@ Commands:
 To run in germline mode, simply provide a BAM file using the `--bam_file` option.
 
 ```
-$ snpahoy --bed_file snps.bed --output_json_file snpahoy.json germline --help
+$ snpahoy germline --help
 Usage: snpahoy germline [OPTIONS]
 
 Options:
-  --bam_file PATH  BAM file. Must be indexed.  [required]
-  --help           Show this message and exit.
+  --bed_file PATH          BED file with SNP postions  [required]
+  --bam_file PATH          BAM file (must be indexed)  [required]
+  --output_json_file PATH  JSON output file  [required]
+  --help                   Show this message and exit.
 ```
 
 The output JSON file contains input information, genotypes at all SNP positions, and a summary. In case a SNP is not genotyped (as for the `chrY` ones in the example below), the empty string is reported as genotype.
@@ -74,12 +74,14 @@ The output JSON file contains input information, genotypes at all SNP positions,
 To run in somatic mode, provide tumor and germline BAM files using the `--tumor_bam_file` and `--germline_bam_file` options.
 
 ```
-$ snpahoy --bed_file snps.bed --output_json_file snpahoy.json somatic --help
+$ snpahoy somatic --help
 Usage: snpahoy somatic [OPTIONS]
 
 Options:
-  --tumor_bam_file PATH     Tumor BAM file. Must be indexed.  [required]
-  --germline_bam_file PATH  Germline BAM file. Must be indexed.  [required]
+  --bed_file PATH           BED file with SNP postions  [required]
+  --tumor_bam_file PATH     Tumor BAM file (must be indexed)  [required]
+  --germline_bam_file PATH  Germline BAM file (must be indexed)  [required]
+  --output_json_file PATH   JSON output file  [required]
   --help                    Show this message and exit.
 ```
 

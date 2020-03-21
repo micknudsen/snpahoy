@@ -105,11 +105,11 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
         },
         "summary": {
             "snps-total": 1041,
-            "snps-genotyped": 1028,
-            "heterozygotes-fraction-tumor": 0.4533,
-            "heterozygotes-fraction-germline": 0.4533,
-            "mean-maf-homozygote-sites-tumor": 0.0006,
-            "mean-maf-homozygote-sites-germline": 0.0006
+            "snps-genotyped": 907,
+            "heterozygotes-fraction-normal": 0.4245,
+            "heterozygotes-fraction-tumor": 0.4256,
+            "mean-maf-homozygote-sites-normal": 0.0004,
+            "mean-maf-homozygote-sites-tumor": 0.0006
         }
     }
 ```

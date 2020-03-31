@@ -111,6 +111,8 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
         results['output']['summary']['heterozygotes-fraction-germline'] = float('%.4f' % (number_of_heterozygotes_germline / len(genotyped_snp_pairs)))
         results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions))
         results['output']['summary']['mean-maf-homozygote-sites-germline'] = float('%.4f' % mean_minor_allele_frequency(snps=germline_snps_at_homozygote_positions))
+        results['output']['summary']['mean-off-genotype-frequency-tumor'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['tumor'] for pair in genotyped_snp_pairs]))
+        results['output']['summary']['mean-off-genotype-frequency-germline'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['germline'] for pair in genotyped_snp_pairs]))
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

@@ -41,11 +41,7 @@ class SNP:
     def off_genotype_frequency(self) -> float:
         if not self._genotype:
             raise MissingGenotypeError
-        genotype_bases = set(self._genotype)
-        off_genotype_count = 0
-        for base, count in self._counts.items():
-            if base not in genotype_bases:
-                off_genotype_count += count
+        off_genotype_count = sum(count for base, count in self._counts.items() if base not in set(self._genotype))
         return off_genotype_count / self.depth
 
 

@@ -3,6 +3,8 @@ import unittest
 from snpahoy.core import SNP
 from snpahoy.core import Genotyper
 
+from snpahoy.exceptions import MissingGenotypeError
+
 
 class TestGenotyper(unittest.TestCase):
 

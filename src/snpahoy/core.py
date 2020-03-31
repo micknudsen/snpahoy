@@ -1,6 +1,8 @@
 from typing import Dict
 from typing import Optional
 
+from snpahoy.exceptions import MissingGenotypeError
+
 
 class SNP:
 
@@ -35,6 +37,12 @@ class SNP:
         if self.depth == 0:
             return 0.0
         return sorted([count / self.depth for count in self._counts.values()])[-2]
+
+    def off_genotype_frequency(self) -> float:
+        if not self._genotype:
+            raise MissingGenotypeError
+        off_genotype_count = sum(count for base, count in self._counts.items() if base not in set(self._genotype))
+        return off_genotype_count / self.depth
 
 
 class Genotyper:

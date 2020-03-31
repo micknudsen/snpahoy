@@ -27,8 +27,13 @@ def count_heterozygotes(snps: List[SNP]) -> int:
 
 
 def mean_minor_allele_frequency(snps: List[SNP]) -> float:
-    """Computes the mean minor allele frequency at sites which are homozygote in the germline sample."""
+    """Computes the mean minor allele frequency SNPs."""
     return mean([snp.minor_allele_frequency() for snp in snps])
+
+
+def mean_off_genotype_frequency(snps: List[SNP]) -> float:
+    """Compues the mean off genotype frequency of SNPs."""
+    return mean([snp.off_genotype_frequency() for snp in snps])
 
 
 @click.group()
@@ -106,6 +111,8 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
         results['output']['summary']['heterozygotes-fraction-germline'] = float('%.4f' % (number_of_heterozygotes_germline / len(genotyped_snp_pairs)))
         results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions))
         results['output']['summary']['mean-maf-homozygote-sites-germline'] = float('%.4f' % mean_minor_allele_frequency(snps=germline_snps_at_homozygote_positions))
+        results['output']['summary']['mean-off-genotype-frequency-tumor'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['tumor'] for pair in genotyped_snp_pairs]))
+        results['output']['summary']['mean-off-genotype-frequency-germline'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['germline'] for pair in genotyped_snp_pairs]))
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)
@@ -151,6 +158,7 @@ def germline(ctx, bed_file, bam_file, output_json_file):
     if genotyped_snps:
         results['output']['summary']['heterozygotes-fraction'] = float('%.4f' % (number_of_heterozygotes / len(genotyped_snps)))
         results['output']['summary']['mean-maf-homozygote-sites'] = float('%.4f' % mean_minor_allele_frequency(snps=homozygote_snps))
+        results['output']['summary']['mean-off-genotype-frequency'] = float('%.4f' % mean_off_genotype_frequency(snps=homozygote_snps))
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

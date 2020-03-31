@@ -61,9 +61,10 @@ The output JSON file contains input information, genotypes at all SNP positions,
         },
         "summary": {
             "snps-total": 1041,
-            "snps-genotyped": 1028,
-            "heterozygotes-fraction": 0.4572,
-            "mean-maf-homozygote-sites": 0.0004
+            "snps-genotyped": 1040,
+            "heterozygotes-fraction": 0.4404,
+            "mean-maf-homozygote-sites": 0.0006,
+            "mean-off-genotype-frequency": 0.0006
         }
     }
 }
@@ -105,11 +106,13 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
         },
         "summary": {
             "snps-total": 1041,
-            "snps-genotyped": 907,
-            "heterozygotes-fraction-normal": 0.4245,
-            "heterozygotes-fraction-tumor": 0.4256,
-            "mean-maf-homozygote-sites-normal": 0.0004,
-            "mean-maf-homozygote-sites-tumor": 0.0006
+            "snps-genotyped": 1040,
+            "heterozygotes-fraction-tumor": 0.4337,
+            "heterozygotes-fraction-germline": 0.4404,
+            "mean-maf-homozygote-sites-tumor": 0.0007,
+            "mean-maf-homozygote-sites-germline": 0.0006,
+            "mean-off-genotype-frequency-tumor": 0.0009,
+            "mean-off-genotype-frequency-germline": 0.0006
         }
     }
 ```

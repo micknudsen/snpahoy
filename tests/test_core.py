@@ -3,6 +3,8 @@ import unittest
 from snpahoy.core import SNP
 from snpahoy.core import Genotyper
 
+from snpahoy.exceptions import MissingGenotypeError
+
 
 class TestGenotyper(unittest.TestCase):
 
@@ -48,6 +50,19 @@ class TestSNP(unittest.TestCase):
     def test_minor_allele_frequency_at_uncovered_position(self):
         snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G': 0, 'T': 0})
         self.assertEqual(snp.minor_allele_frequency(), 0.0)
+
+    def test_off_genotype_frequency_homozygote_site(self):
+        snp = SNP(chromosome='chr1', position=1000, genotype='AA', counts={'A': 95, 'C': 1, 'G': 3, 'T': 1})
+        self.assertEqual(snp.off_genotype_frequency(), 0.05)
+
+    def test_off_genotype_frequency_heterozygote_site(self):
+        snp = SNP(chromosome='chr2', position=5000, genotype='GT', counts={'A': 3, 'C': 2, 'G': 25, 'T': 20})
+        self.assertEqual(snp.off_genotype_frequency(), 0.1)
+
+    def test_off_genotype_frequency_at_non_genotyped_site_raises_exception(self):
+        snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 1, 'C': 2, 'G': 0, 'T': 1})
+        with self.assertRaises(MissingGenotypeError):
+            snp.off_genotype_frequency()
 
     def test_snp_string_representation(self):
         self.assertEqual(self.snp.__str__(), 'chr1:1000')

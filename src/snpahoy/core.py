@@ -36,6 +36,9 @@ class SNP:
             return 0.0
         return sorted([count / self.depth for count in self._counts.values()])[-2]
 
+    def off_genotype_frequency(self) -> float:
+        pass
+
 
 class Genotyper:
 

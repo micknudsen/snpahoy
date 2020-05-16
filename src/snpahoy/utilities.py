@@ -11,9 +11,13 @@ def count_heterozygotes(snps: List[SNP]) -> int:
 
 def mean_minor_allele_frequency(snps: List[SNP]) -> float:
     """Computes the mean minor allele frequency SNPs."""
+    if not snps:
+        return 0.0
     return mean([snp.minor_allele_frequency() for snp in snps])
 
 
 def mean_off_genotype_frequency(snps: List[SNP]) -> float:
     """Compues the mean off genotype frequency of SNPs."""
+    if not snps:
+        return 0.0
     return mean([snp.off_genotype_frequency() for snp in snps])

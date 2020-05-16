@@ -21,21 +21,6 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict
     return {'A': coverage[0][0], 'C': coverage[1][0], 'G': coverage[2][0], 'T': coverage[3][0]}
 
 
-def count_heterozygotes(snps: List[SNP]) -> int:
-    """Exactly as advertized. Counts the number of heterozygote sites."""
-    return len([snp for snp in snps if snp.is_heterozygote()])
-
-
-def mean_minor_allele_frequency(snps: List[SNP]) -> float:
-    """Computes the mean minor allele frequency SNPs."""
-    return mean([snp.minor_allele_frequency() for snp in snps])
-
-
-def mean_off_genotype_frequency(snps: List[SNP]) -> float:
-    """Compues the mean off genotype frequency of SNPs."""
-    return mean([snp.off_genotype_frequency() for snp in snps])
-
-
 @click.group()
 @click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage')
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')

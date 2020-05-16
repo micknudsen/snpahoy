@@ -3,17 +3,16 @@ import json
 import os
 
 from collections import defaultdict
-from statistics import mean
 from typing import Dict
-from typing import List
-
 
 from pysam import AlignmentFile
 
 from snpahoy.core import Genotyper
-from snpahoy.core import SNP
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
+from snpahoy.utilities import count_heterozygotes
+from snpahoy.utilities import mean_minor_allele_frequency
+from snpahoy.utilities import mean_off_genotype_frequency
 
 
 def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict[str, int]:

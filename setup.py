@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
 
     name='snpahoy',
-    version='0.3.1',
+    version='0.3.2',
 
     packages=find_packages('src'),
     package_dir={'': 'src'},
@@ -18,7 +18,7 @@ setup(
 
     install_requires=[
         'click',
-        'pysam',
+        'pysam >=0.15',
     ],
 
     author='Michael Knudsen',

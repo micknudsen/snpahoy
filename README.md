@@ -11,9 +11,14 @@ Usage: snpahoy [OPTIONS] COMMAND [ARGS]...
 Options:
   --minimum_coverage INTEGER      Only consider SNP positions with a lest this
                                   coverage  [default: 30]
+
+  --minimum_base_quality INTEGER  Only count bases with a least the quality
+                                  [default: 1]
+
   --homozygosity_threshold FLOAT  Consider a SNP position homozygote if
                                   frequency of most common allele is this or
                                   higher  [default: 0.95]
+
   --help                          Show this message and exit.
 
 Commands:

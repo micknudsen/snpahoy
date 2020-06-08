@@ -60,11 +60,17 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
 
     germline_snps = get_snps(coordinates=snp_coordinates,
                              genotyper=ctx.obj['genotyper'],
-                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
+                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file),
+                                                                                chromosome=chromosome,
+                                                                                position=position,
+                                                                                minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     tumor_snps = get_snps(coordinates=snp_coordinates,
                           genotyper=ctx.obj['genotyper'],
-                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
+                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file),
+                                                                             chromosome=chromosome,
+                                                                             position=position,
+                                                                             minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     tumor_genotypes = {}
     for snp in tumor_snps:
@@ -121,7 +127,10 @@ def germline(ctx, bed_file, bam_file, output_json_file):
 
     snps = get_snps(coordinates=snp_coordinates,
                     genotyper=ctx.obj['genotyper'],
-                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
+                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file),
+                                                                       chromosome=chromosome,
+                                                                       position=position,
+                                                                       minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     genotypes = {}
     genotyped_snps = []

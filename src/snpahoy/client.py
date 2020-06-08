@@ -15,16 +15,17 @@ from snpahoy.utilities import mean_minor_allele_frequency
 from snpahoy.utilities import mean_off_genotype_frequency
 
 
-def get_counts(alignment: AlignmentFile, chromosome: str, position: int) -> Dict[str, int]:
-    coverage = alignment.count_coverage(contig=chromosome, start=position, stop=position + 1)
+def get_counts(alignment: AlignmentFile, chromosome: str, position: int, minimum_base_quality: int) -> Dict[str, int]:
+    coverage = alignment.count_coverage(contig=chromosome, start=position, stop=position + 1, quality_threshold=minimum_base_quality)
     return {'A': coverage[0][0], 'C': coverage[1][0], 'G': coverage[2][0], 'T': coverage[3][0]}
 
 
 @click.group()
 @click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage')
+@click.option('--minimum_base_quality', default=1, show_default=True, help='Only count bases with a least the quality')
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context
-def client(ctx, minimum_coverage, homozygosity_threshold):
+def client(ctx, minimum_coverage, homozygosity_threshold, minimum_base_quality):
 
     ctx.obj['genotyper'] = Genotyper(minimum_coverage=minimum_coverage,
                                      homozygosity_threshold=homozygosity_threshold)
@@ -35,6 +36,7 @@ def client(ctx, minimum_coverage, homozygosity_threshold):
     results['output'] = defaultdict(dict)
 
     results['input']['settings'] = {'minimum-coverage': minimum_coverage,
+                                    'minimum-base-quality': minimum_base_quality,
                                     'homozygosity-threshold': homozygosity_threshold}
 
     ctx.obj['results'] = results
@@ -58,11 +60,11 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
 
     germline_snps = get_snps(coordinates=snp_coordinates,
                              genotyper=ctx.obj['genotyper'],
-                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file), chromosome=chromosome, position=position))
+                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     tumor_snps = get_snps(coordinates=snp_coordinates,
                           genotyper=ctx.obj['genotyper'],
-                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position))
+                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     tumor_genotypes = {}
     for snp in tumor_snps:
@@ -119,7 +121,7 @@ def germline(ctx, bed_file, bam_file, output_json_file):
 
     snps = get_snps(coordinates=snp_coordinates,
                     genotyper=ctx.obj['genotyper'],
-                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position))
+                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file), chromosome=chromosome, position=position, minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     genotypes = {}
     genotyped_snps = []

@@ -12,7 +12,7 @@ Options:
   --minimum_coverage INTEGER      Only consider SNP positions with a lest this
                                   coverage  [default: 30]
 
-  --minimum_base_quality INTEGER  Only count bases with a least the quality
+  --minimum_base_quality INTEGER  Only count bases with a least this quality
                                   [default: 1]
 
   --homozygosity_threshold FLOAT  Consider a SNP position homozygote if

@@ -21,7 +21,7 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int, minimum
 
 
 @click.group()
-@click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a lest this coverage')
+@click.option('--minimum_coverage', default=30, show_default=True, help='Only consider SNP positions with a least this coverage')
 @click.option('--minimum_base_quality', default=1, show_default=True, help='Only count bases with at least this quality')
 @click.option('--homozygosity_threshold', default=0.95, show_default=True, help='Consider a SNP position homozygote if frequency of most common allele is this or higher')
 @click.pass_context

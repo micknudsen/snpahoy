@@ -9,7 +9,7 @@ $ snpahoy --help
 Usage: snpahoy [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --minimum_coverage INTEGER      Only consider SNP positions with a lest this
+  --minimum_coverage INTEGER      Only consider SNP positions with a least this
                                   coverage  [default: 30]
 
   --minimum_base_quality INTEGER  Only count bases with at least this quality

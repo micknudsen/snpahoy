@@ -57,7 +57,7 @@ class Genotyper:
         if coverage == 0 or coverage < self._minimum_coverage:
             return None
 
-        most_frequent_allele, second_most_frequent_allele, *_ = sorted(counts, key=counts.get, reverse=True)
+        most_frequent_allele, second_most_frequent_allele, *_ = sorted(counts, key=lambda allele: counts[allele], reverse=True)
 
         frequencies = [count / coverage for count in counts.values()]
         if max(frequencies) < self._homozygosity_threshold:

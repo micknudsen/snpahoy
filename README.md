@@ -99,7 +99,7 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
         "files": {
             "bed-file": "snps.bed",
             "tumor-bam-file": "tumor.bam",
-            "germline-bam_file": "germline.bam"
+            "germline-bam-file": "germline.bam"
         },
         "settings": {
             "minimum-coverage": 30,

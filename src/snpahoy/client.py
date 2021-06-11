@@ -134,9 +134,9 @@ def germline(ctx, bed_file, bam_file, output_json_file):
                                                                        position=position,
                                                                        minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
-    details = {}
-    genotyped_snps = []
+    genotyped_snps = [snp for snp in snps if snp.genotype]
 
+    details = {}
     for snp in snps:
         details[snp.__str__()] = {
             'genotype': snp.genotype if snp.genotype else '',

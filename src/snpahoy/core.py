@@ -61,5 +61,5 @@ class Genotyper:
 
         frequencies = [count / coverage for count in counts.values()]
         if max(frequencies) < self._homozygosity_threshold:
-            return most_frequent_allele + second_most_frequent_allele
-        return most_frequent_allele + most_frequent_allele
+            return ''.join(sorted([most_frequent_allele, second_most_frequent_allele]))
+        return 2 * most_frequent_allele

@@ -3,11 +3,11 @@ import json
 import os
 
 from collections import defaultdict
-from typing import Dict
+from typing import Dict, List
 
 from pysam import AlignmentFile
 
-from snpahoy.core import Genotyper
+from snpahoy.core import Genotyper, SNP
 from snpahoy.parsers import get_snps
 from snpahoy.parsers import parse_bed_file
 from snpahoy.utilities import count_heterozygotes
@@ -18,6 +18,15 @@ from snpahoy.utilities import mean_off_genotype_frequency
 def get_counts(alignment: AlignmentFile, chromosome: str, position: int, minimum_base_quality: int) -> Dict[str, int]:
     coverage = alignment.count_coverage(contig=chromosome, start=position, stop=position + 1, quality_threshold=minimum_base_quality)
     return {'A': coverage[0][0], 'C': coverage[1][0], 'G': coverage[2][0], 'T': coverage[3][0]}
+
+
+def get_details(snps: List[SNP]):
+    return {snp.__str__(): {
+            'genotype': snp.genotype if snp.genotype else '',
+            'depth': snp.depth,
+            'counts': {base: snp.count(base) for base in list('ACGT')}
+            }
+            for snp in snps}
 
 
 @click.group()
@@ -72,24 +81,8 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
                                                                              position=position,
                                                                              minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
-    tumor_details = {}
-    for snp in tumor_snps:
-        tumor_details[snp.__str__()] = {
-            'genotype': snp.genotype if snp.genotype else '',
-            'depth': snp.depth,
-            'counts': {base: snp.count(base) for base in list('ACGT')}
-        }
-
-    germline_details = {}
-    for snp in germline_snps:
-        germline_details[snp.__str__()] = {
-            'genotype': snp.genotype if snp.genotype else '',
-            'depth': snp.depth,
-            'counts': {base: snp.count(base) for base in list('ACGT')}
-        }
-
-    results['output']['details'] = {'tumor': tumor_details,
-                                    'germline': germline_details}
+    results['output']['details'] = {'tumor': get_details(snps=tumor_snps),
+                                    'germline': get_details(snps=germline_snps)}
 
     # Only consider SNPs which are genotyped in both germline and tumor sample.
     genotyped_snp_pairs = []

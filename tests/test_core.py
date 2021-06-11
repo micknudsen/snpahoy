@@ -3,7 +3,7 @@ import unittest
 from snpahoy.core import SNP
 from snpahoy.core import Genotyper
 
-from snpahoy.exceptions import MissingGenotypeError
+from snpahoy.exceptions import MissingGenotypeError, UnknownBaseError
 
 
 class TestGenotyper(unittest.TestCase):

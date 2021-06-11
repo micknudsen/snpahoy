@@ -1,7 +1,7 @@
 from typing import Dict
 from typing import Optional
 
-from snpahoy.exceptions import MissingGenotypeError
+from snpahoy.exceptions import MissingGenotypeError, UnknownBaseError
 
 
 class SNP:
@@ -22,6 +22,12 @@ class SNP:
     @property
     def depth(self) -> int:
         return sum(self._counts.values())
+
+    def count(self, base: str) -> int:
+        try:
+            return self._counts[base]
+        except KeyError:
+            raise UnknownBaseError
 
     def is_homozygote(self) -> bool:
         if not self._genotype:

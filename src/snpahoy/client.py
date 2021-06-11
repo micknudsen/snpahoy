@@ -72,15 +72,24 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
                                                                              position=position,
                                                                              minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
-    tumor_genotypes = {}
+    tumor_details = {}
     for snp in tumor_snps:
-        tumor_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
-    results['output']['tumor-genotypes'] = tumor_genotypes
+        tumor_details[snp.__str__()] = {
+            'genotype': snp.genotype if snp.genotype else '',
+            'depth': snp.depth,
+            'counts': {base: snp.count(base) for base in list('ACGT')}
+        }
 
-    germline_genotypes = {}
+    germline_details = {}
     for snp in germline_snps:
-        germline_genotypes[snp.__str__()] = snp.genotype if snp.genotype else ''
-    results['output']['germline-genotypes'] = germline_genotypes
+        germline_details[snp.__str__()] = {
+            'genotype': snp.genotype if snp.genotype else '',
+            'depth': snp.depth,
+            'counts': {base: snp.count(base) for base in list('ACGT')}
+        }
+
+    results['output']['details'] = {'tumor': tumor_details,
+                                    'germline': germline_details}
 
     # Only consider SNPs which are genotyped in both germline and tumor sample.
     genotyped_snp_pairs = []

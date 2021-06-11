@@ -14,6 +14,7 @@ class TestGenotyper(unittest.TestCase):
         self.assertEqual(genotyper.genotype({'A': 0, 'C': 50, 'G': 50, 'T': 0}), 'CG')
         self.assertEqual(genotyper.genotype({'A': 0, 'C': 95, 'G': 5, 'T': 0}), 'CC')
         self.assertEqual(genotyper.genotype({'A': 0, 'C': 0, 'G': 90, 'T': 10}), 'GT')
+        self.assertEqual(genotyper.genotype({'A': 0, 'C': 0, 'G': 10, 'T': 90}), 'GT')
         self.assertEqual(genotyper.genotype({'A': 20, 'C': 5, 'G': 0, 'T': 0}), None)
 
 

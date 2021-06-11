@@ -72,5 +72,10 @@ class TestSNP(unittest.TestCase):
         self.assertEqual(snp.count('G'), 7)
         self.assertEqual(snp.count('T'), 9)
 
+    def test_count_unknown_base_raises_exception(self):
+        snp = SNP(chromosome='chr1', position=1000, genotype='AA', counts={'A': 95, 'C': 1, 'G': 3, 'T': 1})
+        with self.assertRaises(UnknownBaseError):
+            snp.count('N')
+
     def test_snp_string_representation(self):
         self.assertEqual(self.snp.__str__(), 'chr1:1000')

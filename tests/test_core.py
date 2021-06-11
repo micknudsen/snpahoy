@@ -65,5 +65,12 @@ class TestSNP(unittest.TestCase):
         with self.assertRaises(MissingGenotypeError):
             snp.off_genotype_frequency()
 
+    def test_count(self):
+        snp = SNP(chromosome='chr19', position=230, genotype='AC', counts={'A': 30, 'C': 22, 'G': 7, 'T': 9})
+        self.assertEqual(snp.count('A'), 30)
+        self.assertEqual(snp.count('C'), 22)
+        self.assertEqual(snp.count('G'), 7)
+        self.assertEqual(snp.count('T'), 9)
+
     def test_snp_string_representation(self):
         self.assertEqual(self.snp.__str__(), 'chr1:1000')

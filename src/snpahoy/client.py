@@ -97,16 +97,19 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
     germline_snps_at_homozygote_positions = [pair['germline'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
     tumor_snps_at_homozygote_positions = [pair['tumor'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
 
-    results['output']['summary'] = {'snps-total': len(snp_coordinates),
-                                    'snps-genotyped': len(genotyped_snp_pairs)}
+    results['output']['summary'] = {'snps': {'total': len(snp_coordinates), 'snps-genotyped': len(genotyped_snp_pairs)}}
 
     if genotyped_snp_pairs:
-        results['output']['summary']['heterozygotes-fraction-tumor'] = float('%.4f' % (number_of_heterozygotes_tumor / len(genotyped_snp_pairs)))
-        results['output']['summary']['heterozygotes-fraction-germline'] = float('%.4f' % (number_of_heterozygotes_germline / len(genotyped_snp_pairs)))
-        results['output']['summary']['mean-maf-homozygote-sites-tumor'] = float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions))
-        results['output']['summary']['mean-maf-homozygote-sites-germline'] = float('%.4f' % mean_minor_allele_frequency(snps=germline_snps_at_homozygote_positions))
-        results['output']['summary']['mean-off-genotype-frequency-tumor'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['tumor'] for pair in genotyped_snp_pairs]))
-        results['output']['summary']['mean-off-genotype-frequency-germline'] = float('%.4f' % mean_off_genotype_frequency(snps=[pair['germline'] for pair in genotyped_snp_pairs]))
+        results['output']['summary']['tumor'] = {
+            'heterozygotes-fraction': float('%.4f' % (number_of_heterozygotes_tumor / len(genotyped_snp_pairs))),
+            'mean-maf-homozygote-sites': float('%.4f' % mean_minor_allele_frequency(snps=tumor_snps_at_homozygote_positions)),
+            'mean-off-genotype-frequency': float('%.4f' % mean_off_genotype_frequency(snps=[pair['tumor'] for pair in genotyped_snp_pairs]))
+        }
+        results['output']['summary']['germline'] = {
+            'heterozygotes-fraction': float('%.4f' % (number_of_heterozygotes_germline / len(genotyped_snp_pairs))),
+            'mean-maf-homozygote-sites': float('%.4f' % mean_minor_allele_frequency(snps=germline_snps_at_homozygote_positions)),
+            'mean-off-genotype-frequency': float('%.4f' % mean_off_genotype_frequency(snps=[pair['germline'] for pair in genotyped_snp_pairs]))
+        }
 
     with open(output_json_file, 'w') as json_file_handle:
         json.dump(results, json_file_handle, indent=4)

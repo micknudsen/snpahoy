@@ -137,9 +137,7 @@ def germline(ctx, bed_file, bam_file, output_json_file):
     genotyped_snps = [snp for snp in snps if snp.genotype]
 
     results['output']['details'] = get_details(snps=snps)
-
-    results['output']['summary'] = {'snps-total': len(snps),
-                                    'snps-genotyped': len(genotyped_snps)}
+    results['output']['summary'] = {'snps': {'total': len(snps), 'snps-genotyped': len(genotyped_snps)}}
 
     number_of_heterozygotes = count_heterozygotes(snps=genotyped_snps)
     homozygote_snps = [snp for snp in snps if snp.is_homozygote()]

@@ -95,7 +95,7 @@ The output JSON file contains input information, genotypes at all SNP positions,
         "summary": {
             "snps": {
                 "total": 1041,
-                "snps-genotyped": 1016
+                "genotyped": 1016
             },
             "heterozygotes-fraction": 0.4744,
             "mean-maf-homozygote-sites": 0.0022,
@@ -145,7 +145,7 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
         "summary": {
             "snps": {
                 "total": 1041,
-                "snps-genotyped": 1000
+                "genotyped": 1000
             },
             "tumor": {
                 "heterozygotes-fraction": 0.474,

@@ -98,7 +98,7 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
     germline_snps_at_homozygote_positions = [pair['germline'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
     tumor_snps_at_homozygote_positions = [pair['tumor'] for pair in genotyped_snp_pairs if pair['germline'].is_homozygote()]
 
-    results['output']['summary'] = {'snps': {'total': len(snp_coordinates), 'snps-genotyped': len(genotyped_snp_pairs)}}
+    results['output']['summary'] = {'snps': {'total': len(snp_coordinates), 'genotyped': len(genotyped_snp_pairs)}}
 
     if genotyped_snp_pairs:
         results['output']['summary']['tumor'] = {
@@ -141,7 +141,7 @@ def germline(ctx, bed_file, bam_file, output_json_file):
     genotyped_snps = [snp for snp in snps if snp.genotype]
 
     results['output']['details'] = get_details(snps=snps)
-    results['output']['summary'] = {'snps': {'total': len(snps), 'snps-genotyped': len(genotyped_snps)}}
+    results['output']['summary'] = {'snps': {'total': len(snps), 'genotyped': len(genotyped_snps)}}
 
     number_of_heterozygotes = count_heterozygotes(snps=genotyped_snps)
     homozygote_snps = [snp for snp in snps if snp.is_homozygote()]

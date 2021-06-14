@@ -46,30 +46,60 @@ The output JSON file contains input information, genotypes at all SNP positions,
 ```
 {
     "input": {
+        "settings": {
+            "minimum-coverage": 30,
+            "minimum-base-quality": 1,
+            "homozygosity-threshold": 0.95
+        },
         "files": {
             "bed-file": "snps.bed",
             "bam-file": "germline.bam"
-        },
-        "settings": {
-            "minimum-coverage": 30,
-            "homozygosity-threshold": 0.95
         }
     },
     "output": {
-        "genotypes": {
-            "chr1:4789323": "CC",
-            "chr1:4895801": "CC",
-            "chr1:7374482": "TT",
-            ...
-            "chrY:20768865": "",
-            "chrY:23164803": ""
+        "details": {
+            "chr1:4789323": {
+                "genotype": "CC",
+                "depth": 88,
+                "counts": {
+                    "A": 1,
+                    "C": 87,
+                    "G": 0,
+                    "T": 0
+                }
+            },
+            "chr1:4895801": {
+                "genotype": "TT",
+                "depth": 65,
+                "counts": {
+                    "A": 0,
+                    "C": 0,
+                    "G": 0,
+                    "T": 65
+                }
+            },
+
+            (...)
+
+            "chrY:23164803": {
+                "genotype": "",
+                "depth": 0,
+                "counts": {
+                    "A": 0,
+                    "C": 0,
+                    "G": 0,
+                    "T": 0
+                }
+            }
         },
         "summary": {
-            "snps-total": 1041,
-            "snps-genotyped": 1040,
-            "heterozygotes-fraction": 0.4404,
-            "mean-maf-homozygote-sites": 0.0006,
-            "mean-off-genotype-frequency": 0.0006
+            "snps": {
+                "total": 1041,
+                "snps-genotyped": 1016
+            },
+            "heterozygotes-fraction": 0.4744,
+            "mean-maf-homozygote-sites": 0.0022,
+            "mean-off-genotype-frequency": 0.0023
         }
     }
 }
@@ -96,30 +126,40 @@ Output is similar to that in germline mode. Only sites which are genotyping in b
 ```
 {
     "input": {
+        "settings": {
+            "minimum-coverage": 30,
+            "minimum-base-quality": 1,
+            "homozygosity-threshold": 0.95
+        },
         "files": {
             "bed-file": "snps.bed",
             "tumor-bam-file": "tumor.bam",
             "germline-bam-file": "germline.bam"
         },
-        "settings": {
-            "minimum-coverage": 30,
-            "homozygosity-threshold": 0.95
-        },
         "output": {
-            "tumor-genotypes": { ... },
-            "germline-genotypes": { ... }
+            "details": {
+                "tumor": { ... },
+                "germline": { ... }
+            }
         },
         "summary": {
-            "snps-total": 1041,
-            "snps-genotyped": 1040,
-            "heterozygotes-fraction-tumor": 0.4337,
-            "heterozygotes-fraction-germline": 0.4404,
-            "mean-maf-homozygote-sites-tumor": 0.0007,
-            "mean-maf-homozygote-sites-germline": 0.0006,
-            "mean-off-genotype-frequency-tumor": 0.0009,
-            "mean-off-genotype-frequency-germline": 0.0006
+            "snps": {
+                "total": 1041,
+                "snps-genotyped": 1000
+            },
+            "tumor": {
+                "heterozygotes-fraction": 0.474,
+                "mean-maf-homozygote-sites": 0.0019,
+                "mean-off-genotype-frequency": 0.0019
+            },
+            "germline": {
+                "heterozygotes-fraction": 0.474,
+                "mean-maf-homozygote-sites": 0.0022,
+                "mean-off-genotype-frequency": 0.0019
+            }
         }
     }
+}
 ```
 
 This tool is developed with the [MSK IMPACT](https://doi.org/10.1016/j.jmoldx.2014.12.006) panel in mind. Suggeseted cut-offs for identifying sample swap or contamination are `0.55` for heterozygotes fractions and `0.01` for mean MAFs.

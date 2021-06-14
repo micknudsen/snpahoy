@@ -61,6 +61,7 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
 
     results = ctx.obj['results']
 
+    results['input']['files'] = {'bed-file': os.path.basename(bed_file)}
     results['input']['files']['tumor-bam-file'] = os.path.basename(tumor_bam_file)
     results['input']['files']['germline-bam-file'] = os.path.basename(germline_bam_file)
 

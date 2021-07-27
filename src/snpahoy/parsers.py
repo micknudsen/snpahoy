@@ -11,7 +11,7 @@ from snpahoy.core import Genotyper
 def parse_bed_file(stream: Iterable[str]) -> List[Tuple[str, int]]:
     result: List[Tuple[str, int]] = []
     for line in stream:
-        chromosome, start, stop = line.split('\t')
+        chromosome, start, stop, *_ = line.split('\t')
         for position in range(int(start), int(stop)):
             result.append((chromosome, position))
     return result

@@ -58,46 +58,46 @@ The output JSON file contains input information, genotypes at all SNP positions,
     },
     "output": {
         "details": {
-            "chr1:4789323": {
-                "depth": 1117,
+            "chr1:13866176": {
+                "depth": 982,
                 "counts": {
-                    "A": 0,
-                    "C": 1116,
+                    "A": 3,
+                    "C": 484,
                     "G": 0,
-                    "T": 1
-                },
-                "alleles": {
-                    "major": {
-                        "base": "C",
-                        "frequency": 0.9991
-                    },
-                    "minor": {
-                        "base": "T",
-                        "frequency": 0.0009
-                    }
-                },
-                "genotype": "CC",
-                "off_genotype_frequency": 0.0009
-            },
-            "chr1:4895801": {
-                "depth": 362,
-                "counts": {
-                    "A": 0,
-                    "C": 177,
-                    "G": 0,
-                    "T": 185
+                    "T": 495
                 },
                 "alleles": {
                     "major": {
                         "base": "T",
-                        "frequency": 0.511
+                        "frequency": 0.5041
                     },
                     "minor": {
                         "base": "C",
-                        "frequency": 0.489
+                        "frequency": 0.4929
                     }
                 },
                 "genotype": "CT",
+                "off_genotype_frequency": 0.0031
+            },
+            "chr1:22261384": {
+                "depth": 323,
+                "counts": {
+                    "A": 0,
+                    "C": 0,
+                    "G": 323,
+                    "T": 0
+                },
+                "alleles": {
+                    "major": {
+                        "base": "G",
+                        "frequency": 1.0
+                    },
+                    "minor": {
+                        "base": "",
+                        "frequency": 0.0
+                    }
+                },
+                "genotype": "GG",
                 "off_genotype_frequency": 0.0
             },
 
@@ -113,11 +113,11 @@ The output JSON file contains input information, genotypes at all SNP positions,
                 },
                 "alleles": {
                     "major": {
-                        "base": "T",
+                        "base": "",
                         "frequency": 0.0
                     },
                     "minor": {
-                        "base": "G",
+                        "base": "",
                         "frequency": 0.0
                     }
                 },

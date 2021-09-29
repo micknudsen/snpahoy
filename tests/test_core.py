@@ -52,6 +52,13 @@ class TestSNP(unittest.TestCase):
         snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G': 0, 'T': 0})
         self.assertEqual(snp.minor_allele_frequency(), 0.0)
 
+    def test_major_allele_frequency(self):
+        self.assertEqual(self.snp.major_allele_frequency(), 0.95)
+
+    def test_major_allele_frequency_at_uncovered_position(self):
+        snp = SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G': 0, 'T': 0})
+        self.assertEqual(snp.major_allele_frequency(), 0.0)
+
     def test_off_genotype_frequency_homozygote_site(self):
         snp = SNP(chromosome='chr1', position=1000, genotype='AA', counts={'A': 95, 'C': 1, 'G': 3, 'T': 1})
         self.assertEqual(snp.off_genotype_frequency(), 0.05)

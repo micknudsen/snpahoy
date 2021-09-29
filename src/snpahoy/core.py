@@ -50,12 +50,12 @@ class SNP:
     def minor_allele_frequency(self) -> float:
         if self.depth == 0:
             return 0.0
-        return sorted([count / self.depth for count in self._counts.values()])[-2]
+        return self._counts[self.minor_allele] / self.depth
 
     def major_allele_frequency(self) -> float:
         if self.depth == 0:
             return 0.0
-        return sorted([count / self.depth for count in self._counts.values()])[-1]
+        return self._counts[self.major_allele] / self.depth
 
     def off_genotype_frequency(self) -> float:
         if not self._genotype:

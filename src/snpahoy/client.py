@@ -21,17 +21,18 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int, minimum
 
 
 def get_details(snps: List[SNP]):
+
     return {
         snp.__str__(): {
             'depth': snp.depth,
             'counts': {base: snp.count(base) for base in list('ACGT')},
             'alleles': {
                 'major': {
-                    'base': snp.major_allele,
+                    'base': snp.major_allele if snp.count(snp.major_allele) > 0 else '',
                     'frequency': float('%.4f' % snp.major_allele_frequency())
                 },
                 'minor': {
-                    'base': snp.minor_allele,
+                    'base': snp.minor_allele if snp.count(snp.minor_allele) > 0 else '',
                     'frequency': float('%.4f' % snp.minor_allele_frequency())
                 }
             },

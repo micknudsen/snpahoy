@@ -23,6 +23,14 @@ class SNP:
     def depth(self) -> int:
         return sum(self._counts.values())
 
+    @property
+    def minor_allele(self) -> str:
+        return sorted(self._counts.items(), key=lambda x: (x[1], x[0]))[-2][0]
+
+    @property
+    def major_allele(self) -> str:
+        return sorted(self._counts.items(), key=lambda x: (x[1], x[0]))[-1][0]
+
     def count(self, base: str) -> int:
         try:
             return self._counts[base]

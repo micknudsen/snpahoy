@@ -59,37 +59,70 @@ The output JSON file contains input information, genotypes at all SNP positions,
     "output": {
         "details": {
             "chr1:4789323": {
-                "genotype": "CC",
-                "depth": 88,
-                "counts": {
-                    "A": 1,
-                    "C": 87,
-                    "G": 0,
-                    "T": 0
-                }
-            },
-            "chr1:4895801": {
-                "genotype": "TT",
-                "depth": 65,
+                "depth": 1117,
                 "counts": {
                     "A": 0,
-                    "C": 0,
+                    "C": 1116,
                     "G": 0,
-                    "T": 65
-                }
+                    "T": 1
+                },
+                "alleles": {
+                    "major": {
+                        "base": "C",
+                        "frequency": 0.9991
+                    },
+                    "minor": {
+                        "base": "T",
+                        "frequency": 0.0009
+                    }
+                },
+                "genotype": "CC",
+                "off_genotype_frequency": 0.0009
+            },
+            "chr1:4895801": {
+                "depth": 362,
+                "counts": {
+                    "A": 0,
+                    "C": 177,
+                    "G": 0,
+                    "T": 185
+                },
+                "alleles": {
+                    "major": {
+                        "base": "T",
+                        "frequency": 0.511
+                    },
+                    "minor": {
+                        "base": "C",
+                        "frequency": 0.489
+                    }
+                },
+                "genotype": "CT",
+                "off_genotype_frequency": 0.0
             },
 
             (...)
 
-            "chrY:23164803": {
-                "genotype": "",
+            "chrY:9401049": {
                 "depth": 0,
                 "counts": {
                     "A": 0,
                     "C": 0,
                     "G": 0,
                     "T": 0
-                }
+                },
+                "alleles": {
+                    "major": {
+                        "base": "T",
+                        "frequency": 0.0
+                    },
+                    "minor": {
+                        "base": "G",
+                        "frequency": 0.0
+                    }
+                },
+                "genotype": "",
+                "off_genotype_frequency": 0.0
             }
         },
         "summary": {

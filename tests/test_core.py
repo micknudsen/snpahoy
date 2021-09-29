@@ -45,6 +45,12 @@ class TestSNP(unittest.TestCase):
         self.assertTrue(SNP(chromosome='chr2', position=5000, genotype='GT', counts={'A': 0, 'C': 0, 'G': 35, 'T': 25}).is_heterozygote())
         self.assertFalse(SNP(chromosome='chr1', position=1000, genotype=None, counts={'A': 0, 'C': 0, 'G': 0, 'T': 0}).is_heterozygote())
 
+    def test_minor_allele(self):
+        self.assertEqual(self.snp.minor_allele, 'G')
+
+    def test_major_allele(self):
+        self.assertEqual(self.snp.major_allele, 'A')
+
     def test_minor_allele_frequency(self):
         self.assertEqual(self.snp.minor_allele_frequency(), 0.03)
 

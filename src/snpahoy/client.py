@@ -22,9 +22,9 @@ def get_counts(alignment: AlignmentFile, chromosome: str, position: int, minimum
 
 def get_details(snps: List[SNP]):
     return {snp.__str__(): {
-            'genotype': snp.genotype if snp.genotype else '',
             'depth': snp.depth,
-            'counts': {base: snp.count(base) for base in list('ACGT')}
+            'counts': {base: snp.count(base) for base in list('ACGT')},
+            'genotype': snp.genotype if snp.genotype else ''
             }
             for snp in snps}
 

@@ -44,6 +44,11 @@ class SNP:
             return 0.0
         return sorted([count / self.depth for count in self._counts.values()])[-2]
 
+    def major_allele_frequency(self) -> float:
+        if self.depth == 0:
+            return 0.0
+        return sorted([count / self.depth for count in self._counts.values()])[-1]
+
     def off_genotype_frequency(self) -> float:
         if not self._genotype:
             raise MissingGenotypeError

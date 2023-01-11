@@ -68,9 +68,10 @@ def client(ctx, minimum_coverage, homozygosity_threshold, minimum_base_quality):
 @click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--tumor_bam_file', type=click.Path(), required=True, help='Tumor BAM file (must be indexed)')
 @click.option('--germline_bam_file', type=click.Path(), required=True, help='Germline BAM file (must be indexed)')
+@click.option('--reference_fasta_file', type=click.Path(), required=False, help='Reference FASTA file for CRAM files')
 @click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
-def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
+def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, reference_fasta_file, output_json_file):
 
     results = ctx.obj['results']
 
@@ -83,14 +84,14 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
 
     germline_snps = get_snps(coordinates=snp_coordinates,
                              genotyper=ctx.obj['genotyper'],
-                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file),
+                             get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(germline_bam_file, reference_filename=reference_fasta_file),
                                                                                 chromosome=chromosome,
                                                                                 position=position,
                                                                                 minimum_base_quality=results['input']['settings']['minimum-base-quality']))
 
     tumor_snps = get_snps(coordinates=snp_coordinates,
                           genotyper=ctx.obj['genotyper'],
-                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file),
+                          get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(tumor_bam_file, reference_filename=reference_fasta_file),
                                                                              chromosome=chromosome,
                                                                              position=position,
                                                                              minimum_base_quality=results['input']['settings']['minimum-base-quality']))
@@ -132,9 +133,10 @@ def somatic(ctx, bed_file, tumor_bam_file, germline_bam_file, output_json_file):
 @client.command()
 @click.option('--bed_file', type=click.Path(), required=True, help='BED file with SNP postions')
 @click.option('--bam_file', type=click.Path(), required=True, help='BAM file (must be indexed)')
+@click.option('--reference_fasta_file', type=click.Path(), required=False, help='Reference FASTA file for CRAM files')
 @click.option('--output_json_file', type=click.Path(), required=True, help='JSON output file')
 @click.pass_context
-def germline(ctx, bed_file, bam_file, output_json_file):
+def germline(ctx, bed_file, bam_file, reference_fasta_file, output_json_file):
 
     results = ctx.obj['results']
 
@@ -146,7 +148,7 @@ def germline(ctx, bed_file, bam_file, output_json_file):
 
     snps = get_snps(coordinates=snp_coordinates,
                     genotyper=ctx.obj['genotyper'],
-                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file),
+                    get_counts=lambda chromosome, position: get_counts(alignment=AlignmentFile(bam_file, reference_filename=reference_fasta_file),
                                                                        chromosome=chromosome,
                                                                        position=position,
                                                                        minimum_base_quality=results['input']['settings']['minimum-base-quality']))

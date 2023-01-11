@@ -28,17 +28,18 @@ Commands:
 
 ## Germline Mode
 
-To run in germline mode, simply provide a BAM file using the `--bam_file` option.
+To run in germline mode, simply provide a BAM/CRAM file using the `--bam_file` option.
 
 ```
 $ snpahoy germline --help
 Usage: snpahoy germline [OPTIONS]
 
 Options:
-  --bed_file PATH          BED file with SNP postions  [required]
-  --bam_file PATH          BAM file (must be indexed)  [required]
-  --output_json_file PATH  JSON output file  [required]
-  --help                   Show this message and exit.
+  --bed_file PATH              BED file with SNP postions  [required]
+  --bam_file PATH              BAM file (must be indexed)  [required]
+  --reference_fasta_file PATH  Reference FASTA file for CRAM files
+  --output_json_file PATH      JSON output file  [required]
+  --help                       Show this message and exit.
 ```
 
 The output JSON file contains input information, genotypes at all SNP positions, and a summary. In case a SNP is not genotyped (as for the `chrY` ones in the example below), the empty string is reported as genotype.
@@ -140,18 +141,19 @@ The output JSON file contains input information, genotypes at all SNP positions,
 
 ## Somatic Mode
 
-To run in somatic mode, provide tumor and germline BAM files using the `--tumor_bam_file` and `--germline_bam_file` options.
+To run in somatic mode, provide tumor and germline BAM/CRAM files using the `--tumor_bam_file` and `--germline_bam_file` options.
 
 ```
 $ snpahoy somatic --help
 Usage: snpahoy somatic [OPTIONS]
 
 Options:
-  --bed_file PATH           BED file with SNP postions  [required]
-  --tumor_bam_file PATH     Tumor BAM file (must be indexed)  [required]
-  --germline_bam_file PATH  Germline BAM file (must be indexed)  [required]
-  --output_json_file PATH   JSON output file  [required]
-  --help                    Show this message and exit.
+  --bed_file PATH              BED file with SNP postions  [required]
+  --tumor_bam_file PATH        Tumor BAM file (must be indexed)  [required]
+  --germline_bam_file PATH     Germline BAM file (must be indexed)  [required]
+  --reference_fasta_file PATH  Reference FASTA file for CRAM files
+  --output_json_file PATH      JSON output file  [required]
+  --help                       Show this message and exit.
 ```
 
 Output is similar to that in germline mode. Only sites which are genotyping in both tumor and germline are used, and the homozygote sites used in mean MAF calculations are the homozygote sites in the germline sample.
